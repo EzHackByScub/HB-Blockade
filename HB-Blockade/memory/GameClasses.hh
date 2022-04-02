@@ -1,0 +1,117 @@
+#pragma once
+#include "Vectors.hh"
+
+class pCamera {
+public:
+	char pad_0568[0x8F8]; //0x0568
+	Matrix4x4 matrix; //0x0720
+};
+class Camera
+{
+	
+public:
+	char pad10[0x10];
+	pCamera* m_cashedptr;
+};
+namespace System
+{
+	class String
+	{
+	public:
+		char pad10[0x10];
+		int Length;
+		const wchar_t* Value;
+	};
+
+}
+
+class RemotePlayerData
+{
+public:
+	char pad_0000[16]; //0x0000
+	int Item; //0x0010
+	char pad_0014[4]; //0x0014
+	Vec3 position; //0x0018
+	Vec3 rotation; //0x0024
+	bool Dead; //0x0030
+	char pad_0031[3]; //0x0031
+	int Helmet; //0x0034
+	int HelmetHealth; //0x0038
+	int Skin; //0x003C
+	int Ha1; //0x0040
+	int Ha2; //0x0044
+	int Ha3; //0x0048
+	int Znak; //0x004C
+	int CountryID; //0x0050
+	int WeaponID; //0x0054
+	Vec3 oldpos; //0x0058
+	char pad_0064[4]; //0x0064
+	void* botEquipment; //0x0068
+	int Stats_Kills; //0x0070
+	int Stats_Deads; //0x0074
+	void* uidStirng; //0x0078
+	int pwID; //0x0080
+	int swID; //0x0084
+	int mwID; //0x0088
+	Vec3 targetPosition; //0x008C
+	int InVehicle; //0x0098
+	int InVehiclePos; //0x009C
+	System::String* ClanName; //0x00A0
+	int ClanId; //0x00A8
+	int AnimState; //0x00AC
+	int Team; //0x00B0
+	char pad_00B4[4]; //0x00B4
+	System::String* Name; //0x00B8
+	int Active; //0x00C0
+	int State; //0x00C4
+	float flash_time; //0x00C8
+	char pad_00CC[4]; //0x00CC
+	void* mySound; //0x00D0
+	void* goHelmets; //0x00D8
+	void* goSkinMask; //0x00E0
+	void* goMasks; //0x00E8
+	void* goHats; //0x00F0
+	void* goAttaches; //0x00F8
+	int isZombie; //0x0100
+	int blockFlag; //0x0104
+	int currBlockType; //0x0108
+	char pad_010C[4]; //0x010C
+	void* _block; //0x0110
+	void* _blockUp; //0x0118
+	void* botPoser; //0x0120
+	int TeamColor; //0x0128
+	char pad_012C[84]; //0x012C
+}; //Size: 0x0180
+class RemotePlayersDataArray
+{
+public:
+	char pad_0000[0x18]; //0x0000
+	int Count;
+	RemotePlayerData* Item[];
+};
+
+class RemotePlayersController
+{
+public:
+	char pad_0000[24]; //0x0000
+	Vec3 myLookPoint; //0x0018
+	char pad_0024[4]; //0x0024
+	void* BotsGmObjArray; //0x0028
+	void* pgoPlayerCreated; //0x0030
+	void* Gui; //0x0038
+	void* teamblock_BlockArray; //0x0040
+	int PlayersLoaded; //0x0048
+	char pad_004C[4]; //0x004C
+	void* csws; //0x0050
+	void* SkinManager; //0x0058
+	void* pgoPlayer; //0x0060
+	void* csrm; //0x0068
+	void* pgoLocalPlayer; //0x0070
+	void* csig; //0x0078
+	void* goCurrentPlayer; //0x0080
+	void* mg; //0x0088
+	class RemotePlayersDataArray* RemotePlayersList; //0x0090
+	float zmupdate; //0x0098
+	float lastupdate; //0x009C
+
+}; //Size: 0x00A0
