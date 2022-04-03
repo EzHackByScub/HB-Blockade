@@ -117,7 +117,7 @@ char* Utils::strstr(char* input, const char* find)
  bool Utils::SpoofCall(void* src, void* dst, __int64* poriginal)
  {
 	 DWORD oldprot;
-	 void* nearpage = nullptr;
+	 void* nearcodecave = nullptr;
 	auto pattern = "C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC";
 	static auto patternToByteZmma = [](const char* pattern)
 	{
@@ -154,19 +154,19 @@ char* Utils::strstr(char* input, const char* find)
 				break;
 			}
 		}
-		if (foundmma) { nearpage = reinterpret_cast<void*>(&scanBytesmma[imma + 1]); }
+		if (foundmma) { nearcodecave = reinterpret_cast<void*>(&scanBytesmma[imma + 1]); }
 	}
-	 if (!nearpage)
+	 if (!nearcodecave)
 		 return 0;
-	 VirtualProtect(nearpage, 0x64, PAGE_EXECUTE_READWRITE, &oldprot);
+	 VirtualProtect(nearcodecave, 0x16, PAGE_EXECUTE_READWRITE, &oldprot);
 	 *poriginal = Utils::GetAbsoluteAddress((__int64)src, 1, 5);
 	 char absJmp[14] = {0xff , 0x25, 0x00, 0x00, 0x00, 0x00, 0, 0, 0,0, //
   0, 0, 0, 0 };
 	 m_memcpy(&absJmp[6], &dst, 8);
-	 m_memcpy(nearpage, absJmp, sizeof(absJmp));
-	 VirtualProtect(nearpage, 0x64, oldprot, &oldprot);
+	 m_memcpy(nearcodecave, absJmp, sizeof(absJmp));
+	 VirtualProtect(nearcodecave, 0x16, oldprot, &oldprot);
 	 // write abs jmp to dst 
-	 auto delta = (__int64)nearpage -5 - (__int64)src;
+	 auto delta = (__int64)nearcodecave -5 - (__int64)src;
 	 VirtualProtect(src, 0x8, 0x40, &oldprot);
 	 //calculate  nearpage delta
 	 int* ptr_calloffset = (int*)(((__int64)src) + 1);
