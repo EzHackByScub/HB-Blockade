@@ -57,7 +57,7 @@ Vec3  Engine::GameObject_GetPosition(__int64 Gameobject)
 {
 	auto intTransform = Engine::GO_Get_InternalTransform(Gameobject);
 	if (!intTransform)
-		return { 0,-10000,0 };
+		return { 0,-1000,0 };
 	return Engine::InternalTransform_GetPosition(intTransform);
 }
 int width = 0;

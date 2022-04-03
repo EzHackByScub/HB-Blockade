@@ -102,7 +102,13 @@ public:
 	int MyIndex; //0x004C
 }; //Size: 0x0050
 
-
+class BotsGmObjArray
+{
+public:
+	char pad_0000[0x18]; //0x0000
+	int Count;
+	__int64 Gameobject[];
+};
 
 class RemotePlayersController
 {
@@ -110,7 +116,7 @@ public:
 	char pad_0000[24]; //0x0000
 	Vec3 myLookPoint; //0x0018
 	char pad_0024[4]; //0x0024
-	void* BotsGmObjArray; //0x0028
+	BotsGmObjArray* BotsGmObj; //0x0028
 	void* pgoPlayerCreated; //0x0030
 	void* Gui; //0x0038
 	void* teamblock_BlockArray; //0x0040
