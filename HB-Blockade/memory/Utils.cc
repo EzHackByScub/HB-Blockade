@@ -19,7 +19,6 @@ __int64 Utils::sigscan(const char* pattern, const char* mod)
 {
 	uintptr_t moduleAdressmm = 0;
 	moduleAdressmm = (__int64)GetModuleHandleA(mod);
-
 	static auto patternToByteZmm = [](const char* pattern)
 	{
 		auto       bytesmm = std::vector<int>{};
@@ -39,17 +38,13 @@ __int64 Utils::sigscan(const char* pattern, const char* mod)
 		}
 		return bytesmm;
 	};
-
 	const auto dosHeadermm = (PIMAGE_DOS_HEADER)moduleAdressmm;
 	const auto ntHeadersmm = (PIMAGE_NT_HEADERS)((std::uint8_t*)moduleAdressmm + dosHeadermm->e_lfanew);
-
 	const auto sizeOfImage = ntHeadersmm->OptionalHeader.SizeOfImage;
 	auto       patternBytesmm = patternToByteZmm(pattern);
 	const auto scanBytesmm = reinterpret_cast<std::uint8_t*>(moduleAdressmm);
-
 	const auto smm = patternBytesmm.size();
 	const auto dmm = patternBytesmm.data();
-
 	for (auto imm = 0ul; imm < sizeOfImage - smm; ++imm)
 	{
 		bool foundmm = true;
@@ -107,3 +102,78 @@ char* Utils::strstr(char* input, const char* find)
 		++p1, ++p2;
 	return ret == 0;
 }
+
+ void* m_memcpy(void* dest, void* src, unsigned int len)
+ {
+	 unsigned int i;
+	 char* char_src = (char*)src;
+	 char* char_dest = (char*)dest;
+	 for (i = 0; i < len; i++) {
+		 char_dest[i] = char_src[i];
+	 }
+	 return dest;
+ }
+
+ bool Utils::SpoofCall(void* src, void* dst, __int64* poriginal)
+ {
+	 DWORD oldprot;
+	 void* nearpage = nullptr;
+	auto pattern = "C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC";
+	static auto patternToByteZmma = [](const char* pattern)
+	{
+		auto       bytesmma = std::vector<int>{};
+		const auto startmma = const_cast<char*>(pattern);
+		const auto endmma = const_cast<char*>(pattern) + strlen(pattern);
+
+		for (auto currentmm = startmma; currentmm < endmma; ++currentmm)
+		{
+			if (*currentmm == '?')
+			{
+				++currentmm;
+				if (*currentmm == '?')
+					++currentmm;
+				bytesmma.push_back(-1);
+			}
+			else { bytesmma.push_back(strtoul(currentmm, &currentmm, 16)); }
+		}
+		return bytesmma;
+	};
+	const auto sizeOfImage = 0xFFFFFF;
+	auto       patternBytesmm = patternToByteZmma(pattern);
+	const auto scanBytesmma = reinterpret_cast<std::uint8_t*>(src);
+	const auto smma = patternBytesmm.size();
+	const auto dmma = patternBytesmm.data();
+	for (auto imma = 0ul; imma < sizeOfImage - smma; ++imma)
+	{
+		bool foundmma = true;
+		for (auto jmma = 0ul; jmma < smma; ++jmma)
+		{
+			if (scanBytesmma[imma + jmma] != dmma[jmma] && dmma[jmma] != -1)
+			{
+				foundmma = false;
+				break;
+			}
+		}
+		if (foundmma) { nearpage = reinterpret_cast<void*>(&scanBytesmma[imma + 1]); }
+	}
+	 if (!nearpage)
+		 return 0;
+	 VirtualProtect(nearpage, 0x64, PAGE_EXECUTE_READWRITE, &oldprot);
+	 *poriginal = Utils::GetAbsoluteAddress((__int64)src, 1, 5);
+	 char absJmp[14] = {0xff , 0x25, 0x00, 0x00, 0x00, 0x00, 0, 0, 0,0, //
+  0, 0, 0, 0 };
+	 m_memcpy(&absJmp[6], &dst, 8);
+	 m_memcpy(nearpage, absJmp, sizeof(absJmp));
+	 VirtualProtect(nearpage, 0x64, oldprot, &oldprot);
+	 // write abs jmp to dst 
+	 auto delta = (__int64)nearpage -5 - (__int64)src;
+	 VirtualProtect(src, 0x8, 0x40, &oldprot);
+	 //calculate  nearpage delta
+	 int* ptr_calloffset = (int*)(((__int64)src) + 1);
+	 *ptr_calloffset = delta;
+	 VirtualProtect(src, 0x8, oldprot, &oldprot);
+	 return true;
+
+ }
+
+

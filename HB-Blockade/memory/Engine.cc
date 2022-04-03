@@ -25,15 +25,41 @@ RemotePlayersController* Engine::GetRemotePlayersController() {
 	RemotePlayersController* controller = (RemotePlayersController*)*(__int64*)*(__int64*)(a2da + 0xB8);
 	return controller;
 }
-Vec3  Engine::TransformGetPosition(__int64 cashedptrtransform)
+
+
+Vec3  Engine::InternalTransform_GetPosition(__int64 internal_transform)
 {
-    __int64 TransformPropTables = *(__int64*)(cashedptrtransform + 0x40);
-    int TransformIndex = *(int*)(cashedptrtransform + 0x48);
-    __int64 PositionTable = *(__int64*)(TransformPropTables + 0x8);
-    Vec3 TransformPositon = *(Vec3*)(PositionTable + TransformIndex * 48);
+	__int64 TransformPropTables = *(__int64*)(internal_transform + 0x38);
+	int TransformIndex = *(int*)(internal_transform + 0x40);
+	__int64 PositionTable = *(__int64*)(TransformPropTables + 0x18);
+	Vec3 TransformPositon = *(Vec3*)(PositionTable + TransformIndex * 48);
 	return TransformPositon;
 }
+__int64  Engine::GO_Get_InternalTransform (__int64 Gameobject)
+{
+	auto internal_gameObject = *(__int64*)(Gameobject + 0x10);
+	if (!internal_gameObject) return 0;
+	auto gameObject_components = *(__int64*)(internal_gameObject + 0x30);
+	if (!gameObject_components) return 0;
+	auto gameObject_internal_transform = *(__int64*)(gameObject_components + 0x8);
+		return gameObject_internal_transform;
+}
 
+const char*  Engine::GameObject_GetName(__int64 Gameobject)
+{
+	auto internal_gameObject = *(__int64*)(Gameobject + 0x10);
+	if (!internal_gameObject) return "";
+	auto name = (const char*)(internal_gameObject + 0x60);
+	if (!name) return "";
+	return name;
+}
+Vec3  Engine::GameObject_GetPosition(__int64 Gameobject)
+{
+	auto intTransform = Engine::GO_Get_InternalTransform(Gameobject);
+	if (!intTransform)
+		return { 0,-10000,0 };
+	return Engine::InternalTransform_GetPosition(intTransform);
+}
 int width = 0;
 int height= 0;
 //  UnityEngine.Camera::WorldToScreenPoint_Injected(UnityEngine.Vector3&,UnityEngine.Camera/MonoOrStereoscopicEye,UnityEngine.Vector3&)

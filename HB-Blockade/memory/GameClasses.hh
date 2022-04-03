@@ -24,7 +24,12 @@ namespace System
 	};
 
 }
-
+class BotEquipment {
+public:
+	char pad_0000[0x78]; //0x0000
+	__int64 GameObject_m_top;
+	__int64 GameObject_m_face;
+};
 class RemotePlayerData
 {
 public:
@@ -46,7 +51,7 @@ public:
 	int WeaponID; //0x0054
 	Vec3 oldpos; //0x0058
 	char pad_0064[4]; //0x0064
-	void* botEquipment; //0x0068
+	BotEquipment* botEquipment; //0x0068
 	int Stats_Kills; //0x0070
 	int Stats_Deads; //0x0074
 	void* uidStirng; //0x0078
@@ -90,6 +95,15 @@ public:
 	RemotePlayerData* Item[];
 };
 
+class SpawnManager
+{
+public:
+	char pad_0000[76]; //0x0000
+	int MyIndex; //0x004C
+}; //Size: 0x0050
+
+
+
 class RemotePlayersController
 {
 public:
@@ -103,7 +117,7 @@ public:
 	int PlayersLoaded; //0x0048
 	char pad_004C[4]; //0x004C
 	void* csws; //0x0050
-	void* SkinManager; //0x0058
+	SpawnManager* SkinManager; //0x0058
 	void* pgoPlayer; //0x0060
 	void* csrm; //0x0068
 	void* pgoLocalPlayer; //0x0070

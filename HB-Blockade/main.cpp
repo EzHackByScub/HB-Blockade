@@ -1,5 +1,7 @@
 #include "includes.h"
 #include "Cheat/Wallhack.hh"
+#include "Cheat/Aimbot.hh"
+
 #include <cstdio>
 #include <iostream>
 
@@ -28,9 +30,11 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
-
-bool init = false;
 bool show;
+bool init = false;
+
+
+
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!init)
@@ -48,6 +52,8 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
 			InitImGui();
 			init = true;
+
+
 		}
 
 		else
@@ -57,8 +63,14 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+	ImGuiIO IMIO = ImGui::GetIO();
+	Global_vars::ScreenW = IMIO.DisplaySize.x;
+	Global_vars::ScreenH = IMIO.DisplaySize.y;
+
+
 	if (Wallhack::enable)
 		Wallhack::Draw();
+		ImGui::GetOverlayDrawList()->AddCircle({Global_vars::ScreenW / 2 ,Global_vars::ScreenH / 2},Aimbot::fov,ImColor(255,255,255,255),64,1);
 
 	if (GetAsyncKeyState(VK_INSERT) & 1)
 		show = !show;
@@ -68,7 +80,10 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 
 	ImGui::Begin("HB-Blockade");
-	ImGui::Checkbox("Wallhack" ,&Wallhack::enable);
+	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
+	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
+
+
 	ImGui::End();
 
 	}
@@ -88,6 +103,7 @@ void hook(__int64 addr, __int64 func, __int64* orig)
 	auto hook = ((__int64(__fastcall*)(__int64 addr, __int64 func, __int64* orig, __int64 smthng))(hook_addr));
 	hook((__int64)addr, (__int64)func, orig, (__int64)1);
 }
+// __int64 __fastcall sub_1813EA4F0(__int64 a1, __int64 a2, unsigned __int64 *a3)
 
 void HookDX11()
 {
@@ -98,10 +114,12 @@ void HookDX11()
 	AllocConsole();
 	FILE* f;
 	freopen_s(&f, "CONOUT$", "w", stdout);
-	std::cout<<std::hex << Addr::RemotePlayersController << "\n";
+
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
 		hook(Steam_DXGI_PresentScene, (__int64)hkPresent, (__int64*)&oPresent);
+
+	Utils::SpoofCall((void*)Addr::callScreenPointToRay, &Aimbot::SpoofTest, (__int64*)&Aimbot::oScreenToRayadr);
 	return;
 }
 
