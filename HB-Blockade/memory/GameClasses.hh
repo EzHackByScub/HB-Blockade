@@ -133,5 +133,4 @@ public:
 	class RemotePlayersDataArray* RemotePlayersList; //0x0090
 	float zmupdate; //0x0098
 	float lastupdate; //0x009C
-
 }; //Size: 0x00A0
