@@ -66,13 +66,15 @@ int height= 0;
 
 bool Engine::Worldtoscreen(Camera* camera, Vec3 position ,Vec3* wtsvec)
 {
-	static __int64 addr = 0;
-	if (!addr)
-		addr = Addr::Il2cppResloveCall("UnityEngine.Camera::WorldToScreenPoint_Injected");
-	const auto WorldToScreen = reinterpret_cast <void(*)(Camera* cam,Vec3* targetpos, unsigned int eye,Vec3* ScreenPos)>(addr);
+	const auto WorldToScreen = reinterpret_cast <void(*)(Camera* cam,Vec3* targetpos, unsigned int eye,Vec3* ScreenPos)>(Addr::WorldToScreenPoint);
 	WorldToScreen(camera,&position, 2,wtsvec);
 	if (wtsvec->z <= 1) 
 		return false;
 	wtsvec->y = ImGui::GetIO().DisplaySize.y - wtsvec->y;
 	return  true;
+}
+
+bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
+{
+	return reinterpret_cast <bool(*)(Vec3 Startpos, Vec3 endpos, RaycastHit * hitinfo)>(Addr::Linecast)(Startpos, endpos, hitinfo);
 }

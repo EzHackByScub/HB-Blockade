@@ -64,10 +64,11 @@ __int64 Utils::GetAbsoluteAddress(__int64 address, int offset, int size) {
 		auto addrs = address + size + *(int*)(address + offset);
 		return addrs;
 }
-__int64 Utils::refSigscan(const char* signature , const char* mod) {
+__int64 Utils::refSigscan(const char* signature , const char* mod, int sigoffset) {
 	__int64 address = Utils::sigscan(signature , mod);
 	if (!address)
 		return NULL;
+	address += sigoffset;
 	hde64s instr;
 	int len = hde64_disasm((void*)address, &instr);
 	if (len > 7) // cmp [],value

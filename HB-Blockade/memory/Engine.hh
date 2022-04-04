@@ -13,5 +13,7 @@ public:
 
 	static __int64  GO_Get_InternalTransform(__int64 Gameobject);
 	static bool Worldtoscreen(Camera* camera, Vec3 position, Vec3* wtsvec);
+	static bool LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo);
+
 };
 
