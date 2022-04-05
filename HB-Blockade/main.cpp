@@ -119,7 +119,7 @@ void HookDX11()
 	if (Steam_DXGI_PresentScene)
 		hook(Steam_DXGI_PresentScene, (__int64)hkPresent, (__int64*)&oPresent);
 
-	Utils::SpoofCall((void*)Addr::callScreenPointToRay, &Aimbot::SpoofTest, (__int64*)&Aimbot::oScreenToRayadr);
+	Utils::SpoofCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
 	return;
 }
 

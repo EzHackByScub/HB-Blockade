@@ -13,13 +13,18 @@ public:
 	char pad10[0x10];
 	pCamera* m_cashedptr;
 };
+struct  Ray {
+	Vec3 StartPosition;
+	Vec3 Rotation;
+};
+
 struct  RaycastHit {
 	 Vec3 m_Point;
 	 Vec3 m_Normal;
-	uint32_t m_FaceID;
+	int m_FaceID;
 	float m_Distance;
 	 Vec2 m_UV;
-	int32_t m_Collider;
+	 int m_Collider;
 };
 namespace System
 {

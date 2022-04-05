@@ -5,10 +5,7 @@
 
 Camera* Engine::GetCameraMain()
 {
-	static __int64 addr = 0;
-	if (!addr)
-		addr = Addr::Il2cppResloveCall("UnityEngine.Camera::get_main");
-	const auto GetCam = reinterpret_cast <Camera*(*)()>(addr);
+	const auto GetCam = reinterpret_cast <Camera*(*)()>(Addr::getcamera);
 	return GetCam();
 }
 
@@ -76,5 +73,6 @@ bool Engine::Worldtoscreen(Camera* camera, Vec3 position ,Vec3* wtsvec)
 
 bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 {
-	return reinterpret_cast <bool(*)(Vec3 Startpos, Vec3 endpos, RaycastHit * hitinfo)>(Addr::Linecast)(Startpos, endpos, hitinfo);
+	const auto line_cast = reinterpret_cast<bool(*)(Vec3* Startpos, Vec3* endpos, RaycastHit * hitinfo)>(Addr::Linecast);
+	return line_cast(&Startpos, &endpos, hitinfo);
 }

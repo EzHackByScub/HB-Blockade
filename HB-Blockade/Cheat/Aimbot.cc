@@ -1,12 +1,12 @@
 #include "Aimbot.hh"
 #include "../memory/Engine.hh"
 
-bool Aimbot::Physics_Raycast_hk(__int64 a1, __int64 a2, float a3, int a4)
+bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int a4)
 {
 	if ( 1 > 9)
 	{
 	outhk:
-		return oRaycast(a1, a2, a3,a4);
+		return oRaycast(a1, hitinfo, 999,a4);
 	}
 	Camera* camrt = Engine::GetCameraMain();
 	if (camrt == nullptr)
@@ -38,15 +38,31 @@ bool Aimbot::Physics_Raycast_hk(__int64 a1, __int64 a2, float a3, int a4)
 		Vec3 scrPos;
 		Vec3 entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 		if (entitypos.y == -1000) continue;
-
-
-		if (Engine::Worldtoscreen(camrt, { entitypos.x,entitypos.y + 1.5f,entitypos.z }, &scrPos))
+		Vec3 entitybody = { entitypos.x,entitypos.y + 1.5f,entitypos.z };
+		if (Engine::Worldtoscreen(camrt, entitybody, &scrPos))
 		{
 			float x = scrPos.x - (float)Global_vars::ScreenW/ 2;
 			float y = scrPos.y - (float)Global_vars::ScreenH/ 2;
 			float crosshair_dist = sqrtf((x * x) + (y * y));
 				if (crosshair_dist < Aimbot::fov) // FOV)
 				{
+					RaycastHit hit;
+					//auto fireRay= (Ray*)a1;
+					if (Engine::LineCast(a1.StartPosition, entitybody, &hit))
+					{
+						float cmpPosx = hit.m_Point.x - entitybody.x;
+						float cmpPosy = hit.m_Point.y - entitybody.y;
+						float cmpPoz = hit.m_Point.z - entitybody.z;
+						if (cmpPosx > -1 && cmpPosx < 1 && cmpPosy > -1 && cmpPosy < 1 && cmpPoz > -1 && cmpPoz < 1) // to do get tag from hit and compare it 
+						{
+							return Engine::LineCast(a1.StartPosition, entitybody, hitinfo);
+					
+						}
+						else
+						{
+							goto outhk;
+						}
+					}
 					//TODO
 					// vec3 startpos = a1 (ray).Position
 	//	Engine::LineCast(startpos,) 
