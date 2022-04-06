@@ -47,7 +47,7 @@ bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int
 				if (crosshair_dist < Aimbot::fov) // FOV)
 				{
 					RaycastHit hit;
-					//auto fireRay= (Ray*)a1;
+
 					if (Engine::LineCast(a1.StartPosition, entitybody, &hit))
 					{
 						float cmpPosx = hit.m_Point.x - entitybody.x;
@@ -58,22 +58,8 @@ bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int
 							return Engine::LineCast(a1.StartPosition, entitybody, hitinfo);
 					
 						}
-						else
-						{
-							goto outhk;
-						}
 					}
-					//TODO
-					// vec3 startpos = a1 (ray).Position
-	//	Engine::LineCast(startpos,) 
-	//  if hit near ->  return 
-	// 
-	// 
-	// 
-	// 
-	// 
-		        //	return Engine::oScreenToRayadr(a1, a2, (unsigned __int64*)&scrPos);
-		        }
+				
 		}
 	}
 	
