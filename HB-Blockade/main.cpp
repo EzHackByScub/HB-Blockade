@@ -1,7 +1,9 @@
 #include "includes.h"
+#include <winnt.h>
 #include "Cheat/Wallhack.hh"
 #include "Cheat/Aimbot.hh"
-
+#include "Cheat/misc.hh"
+#include "memory/minhook/include/MinHook.h"
 #include <cstdio>
 #include <iostream>
 
@@ -34,7 +36,7 @@ bool show;
 bool init = false;
 
 
-
+static inline const wchar_t buf[255] = L"Hyperbone.cc";
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!init)
@@ -51,6 +53,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			pBackBuffer->Release();
 			oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
 			InitImGui();
+			
 			init = true;
 
 
@@ -66,11 +69,10 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGuiIO IMIO = ImGui::GetIO();
 	Global_vars::ScreenW = IMIO.DisplaySize.x;
 	Global_vars::ScreenH = IMIO.DisplaySize.y;
-
-
-	if (Wallhack::enable)
-		Wallhack::Draw();
 		ImGui::GetOverlayDrawList()->AddCircle({Global_vars::ScreenW / 2 ,Global_vars::ScreenH / 2},Aimbot::fov,ImColor(255,255,255,255),64,1);
+		
+		Wallhack::Draw();
+		misc::Promote();
 
 	if (GetAsyncKeyState(VK_INSERT) & 1)
 		show = !show;
@@ -81,7 +83,18 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 	ImGui::Begin("HB-Blockade");
 	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
+	ImGui::Checkbox("ForceNetworkPos" ,&Wallhack::testoverload);
+	ImGui::Checkbox("auto_reload" ,&misc::auto_reload);
+	ImGui::Checkbox("fast_reload" ,&misc::fast_reload);
+
+
+
+	ImGui::Checkbox("Promote", &misc::active_spam);
+	ImGui::Checkbox("force headshot", &misc::force_headshot);
+
+
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
+
 
 
 	ImGui::End();
@@ -103,9 +116,9 @@ void hook(__int64 addr, __int64 func, __int64* orig)
 	auto hook = ((__int64(__fastcall*)(__int64 addr, __int64 func, __int64* orig, __int64 smthng))(hook_addr));
 	hook((__int64)addr, (__int64)func, orig, (__int64)1);
 }
-// __int64 __fastcall sub_1813EA4F0(__int64 a1, __int64 a2, unsigned __int64 *a3)
 
-void HookDX11()
+
+void hk_init()
 {
 	if (!GetModuleHandleA("GameOverlayRenderer64.dll"))
 	{
@@ -118,8 +131,15 @@ void HookDX11()
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
 		hook(Steam_DXGI_PresentScene, (__int64)hkPresent, (__int64*)&oPresent);
-
 	Utils::SpoofCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
+	MH_Initialize();
+	MH_CreateHook((void*)Addr::client_sendattack, &misc::hk_sendattack, reinterpret_cast<void**>(&misc::o_sendattack));
+	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
+	MH_CreateHook((void*)Addr::weapon_raycast, &misc::hk_weapon_raycast, reinterpret_cast<void**>(&misc::o_weapon_raycast));
+
+	MH_EnableHook(MH_ALL_HOOKS);
+	// client_sendattack
+
 	return;
 }
 
@@ -132,7 +152,7 @@ BOOL __fastcall DllMain(HMODULE hm, DWORD  r, LPVOID lpR)
 {
 
 	if (r == 1)
-		HookDX11();
+		hk_init();
 
 	return TRUE;
 }

@@ -122,6 +122,7 @@
     <ClCompile Include="memory\minhook\src\trampoline.c" />
     <ClCompile Include="memory\Utils.cc" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Cheat\misc.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cheat\Aimbot.hh" />
@@ -148,6 +149,7 @@
     <ClInclude Include="memory\minhook\src\trampoline.h" />
     <ClInclude Include="memory\Utils.hh" />
     <ClInclude Include="memory\Vectors.hh" />
+    <ClInclude Include="Cheat\misc.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

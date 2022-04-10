@@ -4,6 +4,8 @@
 
 void Wallhack::Draw()
 {
+	if (!Wallhack::enable)
+		return;
 
 	Camera* camrt = Engine::GetCameraMain();
 	if (camrt == nullptr)
@@ -36,10 +38,13 @@ void Wallhack::Draw()
 		continue;
 
 		Vec3 scrPos;
-		Vec3 entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
-		if (entitypos.y == -1000) continue;
+		Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
+		if (Wallhack::testoverload)
+		*entitypos = player->position;
 
-		if (Engine::Worldtoscreen(camrt, { entitypos.x,entitypos.y + 1.5f,entitypos.z }, &scrPos))
+		if (entitypos->y == -1000) continue;
+
+		if (Engine::Worldtoscreen(camrt, { entitypos->x,1.65f + entitypos->y ,entitypos->z }, &scrPos))
 		{
 			ImGui::GetBackgroundDrawList()->AddText({ scrPos.x ,scrPos.y }, ImColor{ 255,100,100,255 }, "EZY");
 		}

@@ -33,7 +33,7 @@ namespace System
 	public:
 		char pad10[0x10];
 		int Length;
-		const wchar_t* Value;
+		const wchar_t Value[256];
 	};
 
 }
