@@ -19,7 +19,7 @@ public:
 	/// <param name="dst">pointer to replaced call</param>
 	/// <param name="poriginal">original call</param>
 	/// <returns>Original call address</returns>
-	static  bool SpoofCall(void* src, void* dst, __int64* poriginal);
+	static  bool ReplaceCall(void* src, void* dst, __int64* poriginal);
 	static bool wcsicmp(const wchar_t* a, const wchar_t* b);
 	static char* strstr(char* input, const char* find);
 	static bool strcmp(char* a, char* b);
