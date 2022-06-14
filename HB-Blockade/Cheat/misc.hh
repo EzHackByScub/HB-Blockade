@@ -4,6 +4,7 @@ typedef void(__fastcall* client_send_attack)(__int64 client, char a2, unsigned i
 typedef void(__fastcall* GUIDrawReload)(__int64 a1);
 // vp_FPWeaponReloader::GUIDrawReload
 typedef void(__fastcall* Weapon_raycast)(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS);
+
 //   public void newweapon_raycast(System.Int32 wid, System.Single dist, System.Int32 blockdist, WeaponSystem WS)
 class misc
 {

@@ -3,6 +3,7 @@
 class Utils
 {
 public:
+
 	static __int64 sigscan( const char* pattern , const char* module = nullptr);
 	static __int64 refSigscan(const char* pattern, const char* module = nullptr,  int sigoffset=0);
 	static __int64 GetAbsoluteAddress(__int64 address, int offset, int size);

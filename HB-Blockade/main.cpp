@@ -36,7 +36,7 @@ bool show;
 bool init = false;
 
 
-static inline const wchar_t buf[255] = L"Hyperbone.cc";
+static inline const wchar_t buf[255] = L"Japrajah";
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!init)
@@ -81,17 +81,13 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	{
 
 
-	ImGui::Begin("HB-Blockade");
+	ImGui::Begin("Japrajah#5252-Blockade");
 	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
 	ImGui::Checkbox("ForceNetworkPos" ,&Wallhack::testoverload);
-	ImGui::Checkbox("auto_reload" ,&misc::auto_reload);
-	ImGui::Checkbox("fast_reload" ,&misc::fast_reload);
-
-
-
-	ImGui::Checkbox("Promote", &misc::active_spam);
+	ImGui::Checkbox("No_reload" ,&misc::auto_reload);
+	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
 	ImGui::Checkbox("force headshot", &misc::force_headshot);
-
+	ImGui::Checkbox("Promote", &misc::active_spam);
 
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 
@@ -124,9 +120,9 @@ void hk_init()
 	{
 		exit(0);
 	}
-	AllocConsole();
+	/*AllocConsole();
 	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);
+	freopen_s(&f, "CONOUT$", "w", stdout);*/
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
@@ -134,9 +130,8 @@ void hk_init()
 	Utils::SpoofCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
 	MH_Initialize();
 	MH_CreateHook((void*)Addr::client_sendattack, &misc::hk_sendattack, reinterpret_cast<void**>(&misc::o_sendattack));
-	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
 	MH_CreateHook((void*)Addr::weapon_raycast, &misc::hk_weapon_raycast, reinterpret_cast<void**>(&misc::o_weapon_raycast));
-
+	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
 	MH_EnableHook(MH_ALL_HOOKS);
 	// client_sendattack
 

@@ -1,6 +1,7 @@
 #include "misc.hh"
 #include "../memory/Engine.hh"
-int timeoutcalls = 1000;
+#include "Wallhack.hh"
+int timeoutcalls = 600;
 void misc::Promote()
 {
 	if (!misc::active_spam)
@@ -12,9 +13,9 @@ void misc::Promote()
 	}
 	else
 	{
-		timeoutcalls = 1000;
+		timeoutcalls = 600;
 	}
-		Engine::client_send_msg(L"-> hyperbone.cc <-");
+		Engine::client_send_msg(L"-> yougame.biz мю чцеиле аеяокюрмши вхр акъ асдс!  <-");
 }
 
 
@@ -26,6 +27,8 @@ void __fastcall misc::hk_sendattack(__int64 client, char a2, unsigned int a3, un
 
 
 void misc::hk_reload(__int64 vp_FPWeaponReloader) {
+
+
 	if (misc::fast_reload && vp_FPWeaponReloader)
 	{
 			*(float*)(vp_FPWeaponReloader + 0x50) = 0;
@@ -39,8 +42,41 @@ void misc::hk_reload(__int64 vp_FPWeaponReloader) {
 	//	static void hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS);
 	if (misc::auto_reload)
 	{
-		Engine::send_prereload(wid);
-		Engine::send_reload(wid);
+	
+		if (WeaponSystem)
+		{
+
+		int mwid = *(int*)(WeaponSystem + 0x94); // mwid
+		if (mwid != wid)
+		{
+			Engine::send_prereload(wid);
+			Engine::send_reload(wid);
+		int pwid = *(int*)(WeaponSystem + 0x98);
+		int swid = *(int*)(WeaponSystem + 0x9c);
+
+		int currentwid = *(int*)(WeaponSystem + 0x120);
+		if (pwid == wid)
+		{
+			if (*(int*)(WeaponSystem + 0xC8) >0)
+			{
+			*(int*)(WeaponSystem + 0xC0) += 1; // clip
+			*(int*)(WeaponSystem + 0xC8) -= 1; //backpack	
+			}
+		}
+		else if (swid == wid)
+		{
+			if (*(int*)(WeaponSystem + 0xD4) > 0)
+			{
+				*(int*)(WeaponSystem + 0xCC) += 1;
+				*(int*)(WeaponSystem + 0xD4) -= 1;
+			}
+		}
+
+
+		}
+		}
+	//	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* WS, int wid, float)>(Addr::OnWeaponReloadend);
+
 	}
 
 	return misc::o_weapon_raycast(WeaponSystem, wid, dist, blockdist, WS);

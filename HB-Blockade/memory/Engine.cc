@@ -13,7 +13,7 @@ RemotePlayersController* Engine::GetRemotePlayersController() {
 	if (!Addr::RemotePlayersController)
 		return nullptr;
 	__int64 a2da = *(__int64*)(Addr::RemotePlayersController);
-	if (a2da < 0x00000000C0008649) // 2000BB39
+	if (a2da < 0x0000000030008649) // 2000BB39
 		return nullptr;
 	RemotePlayersController* controller = (RemotePlayersController*)*(__int64*)*(__int64*)(a2da + 0xB8);
 	return controller;
@@ -23,7 +23,7 @@ __int64* Engine::GetClient() {
 	if (!Addr::Clinet)
 		return nullptr;
 	__int64 a2da = *(__int64*)(Addr::Clinet);
-	if (a2da < 0x00000000C0008649) //
+	if (a2da < 0x0000000030008649) //
 		return nullptr;
 	__int64* client = (__int64*)*(__int64*)*(__int64*)(a2da + 0xB8);
 	return client;

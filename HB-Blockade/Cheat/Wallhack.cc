@@ -1,7 +1,7 @@
 #include "Wallhack.hh"
 #include "../memory/Engine.hh"
 #include "../imgui/imgui.h"
-
+int timeoutcallsd = 100;
 void Wallhack::Draw()
 {
 	if (!Wallhack::enable)
@@ -23,6 +23,9 @@ void Wallhack::Draw()
 	if (!spawnmanno) return;
 
 
+	timeoutcallsd--;
+
+
 	auto localIndex = spawnmanno->MyIndex;
 	if (localIndex > plArray->Count || localIndex  < 0) return;
 	auto localplayer = plArray->Item[localIndex];
@@ -32,6 +35,7 @@ void Wallhack::Draw()
 	auto player = plArray->Item[i];
 	if (!player)
 		continue;
+
 	if (player->Dead)
 		continue;
 	if (localplayer->Team == player->Team)
@@ -46,9 +50,15 @@ void Wallhack::Draw()
 
 		if (Engine::Worldtoscreen(camrt, { entitypos->x,1.65f + entitypos->y ,entitypos->z }, &scrPos))
 		{
-			ImGui::GetBackgroundDrawList()->AddText({ scrPos.x ,scrPos.y }, ImColor{ 255,100,100,255 }, "EZY");
+
+				ImGui::GetBackgroundDrawList()->AddText({ scrPos.x ,scrPos.y }, ImColor{ 255,100,100,255 }, "NORM");
+			
 		}
 
+	}
+	if (timeoutcallsd < 0)
+	{
+		timeoutcallsd = 100;
 	}
 
 }

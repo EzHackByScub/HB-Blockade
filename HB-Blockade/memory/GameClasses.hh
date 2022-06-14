@@ -3,8 +3,8 @@
 
 class pCamera {
 public:
-	char pad_0568[0x8F8]; //0x0568
-	Matrix4x4 matrix; //0x0720
+	char pad_0568[0x314]; //0x0568 // 8c 10c
+	Vec3 pos; 
 };
 class Camera
 {
@@ -43,10 +43,17 @@ public:
 	__int64 GameObject_m_top;
 	__int64 GameObject_m_face;
 };
+class BotPoser {
+public:
+	char pad_0000[0x98]; //0x0000
+	bool isProtected;
+};
 class RemotePlayerData
 {
 public:
-	char pad_0000[16]; //0x0000
+	char pad_0000[8]; //0x0000
+	__int8 myshitforvischeck;
+	char pad_0008[7]; //0x0000
 	int Item; //0x0010
 	char pad_0014[4]; //0x0014
 	Vec3 position; //0x0018
@@ -96,7 +103,7 @@ public:
 	char pad_010C[4]; //0x010C
 	void* _block; //0x0110
 	void* _blockUp; //0x0118
-	void* botPoser; //0x0120
+	BotPoser* botPoser; //0x0120
 	int TeamColor; //0x0128
 	char pad_012C[84]; //0x012C
 }; //Size: 0x0180
