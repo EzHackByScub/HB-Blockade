@@ -1,7 +1,7 @@
 #include "Wallhack.hh"
 #include "../memory/Engine.hh"
 #include "../imgui/imgui.h"
-int timeoutcallsd = 100;
+
 void Wallhack::Draw()
 {
 	if (!Wallhack::enable)
@@ -21,9 +21,6 @@ void Wallhack::Draw()
 
 	auto spawnmanno = PlController->SkinManager;
 	if (!spawnmanno) return;
-
-
-	timeoutcallsd--;
 
 
 	auto localIndex = spawnmanno->MyIndex;
@@ -56,9 +53,6 @@ void Wallhack::Draw()
 		}
 
 	}
-	if (timeoutcallsd < 0)
-	{
-		timeoutcallsd = 100;
-	}
+
 
 }
