@@ -127,7 +127,7 @@ void hk_init()
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
 		hook(Steam_DXGI_PresentScene, (__int64)hkPresent, (__int64*)&oPresent);
-	Utils::SpoofCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
+	Utils::ReplaceCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
 	MH_Initialize();
 	MH_CreateHook((void*)Addr::client_sendattack, &misc::hk_sendattack, reinterpret_cast<void**>(&misc::o_sendattack));
 	MH_CreateHook((void*)Addr::weapon_raycast, &misc::hk_weapon_raycast, reinterpret_cast<void**>(&misc::o_weapon_raycast));
