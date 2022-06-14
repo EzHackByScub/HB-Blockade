@@ -115,7 +115,7 @@ char* Utils::strstr(char* input, const char* find)
 	 return dest;
  }
 
- bool Utils::SpoofCall(void* src, void* dst, __int64* poriginal)
+ bool Utils::ReplaceCall(void* src, void* dst, __int64* poriginal)
  {
 	 DWORD oldprot;
 	 void* nearcodecave = nullptr;
