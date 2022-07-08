@@ -26,7 +26,7 @@ void Wallhack::Draw()
 	auto localIndex = spawnmanno->MyIndex;
 	if (localIndex > plArray->Count || localIndex  < 0) return;
 	auto localplayer = plArray->Item[localIndex];
-	if (!localplayer) return;
+	if (!localplayer) return;	
 	for (size_t i = 0; i < plArray->Count; i++)
 	{
 	auto player = plArray->Item[i];
@@ -59,11 +59,6 @@ void Wallhack::Draw()
 	ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 255,255,255,255 }, 2, 15, 2);
 	else if (player->botPoser->isProtected)
 		ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 0,0,255,255 }, 2, 15, 2);
-	}
-
-
-
-
 	}
 
 

@@ -38,6 +38,9 @@ public:
 
 
 	static inline __int64 weapon_raycast = Utils::refSigscan("48 89 ? ? ? E8 ? ? ? ? E9 ? ? ? ? 48 8B ? ? ? ? ? 48 8B", "GameAssembly.dll",5);
+	static inline __int64 CreateDeadEvent = Utils::sigscan("44 89 4C 24 ? 53 55 56 57 41 55", "GameAssembly.dll");
+	static inline __int64 AddDeathMsg = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 44 3B 73 18 0F 85", "GameAssembly.dll"),1,5);
+	static inline __int64 AddMessageChat = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 80 7B 21 00 0F 29 74 24", "GameAssembly.dll"),1,5);
 
 	static inline __int64 weapon_raycast_call_unity_raycast = Utils::sigscan("48 8D ? ? E8 ? ? ? ? 84 C0 0F 84 ? ? ? ? 45 33 ? 48 8D ? ? 48 8D ? ? E8", "GameAssembly.dll")+4;
 	static inline   __int64 getcamera = Addr::Il2cppResloveCall("UnityEngine.Camera::get_main");/*

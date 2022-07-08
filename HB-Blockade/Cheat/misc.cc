@@ -1,6 +1,9 @@
-#include "misc.hh"
+﻿#include "misc.hh"
 #include "../memory/Engine.hh"
 #include "Wallhack.hh"
+#include <string>
+#include <iostream>
+#include <comdef.h> 
 int timeoutcalls = 600;
 void misc::Promote()
 {
@@ -15,7 +18,7 @@ void misc::Promote()
 	{
 		timeoutcalls = 600;
 	}
-		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade �� ������� ���������� ��� ��� ����!  <-");
+		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <-");
 }
 
 
@@ -24,8 +27,35 @@ void __fastcall misc::hk_sendattack(__int64 client, char a2, unsigned int a3, un
 		a5 = 1;
 	return misc::o_sendattack(client, a2, a3, a4, a5, hitboxid,  alter_damage,  ax,   ay,  az,  vx,  vy,  vz,  x1,  y1,  z1,  x2,  y2,  z2);
 }
+void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System::String* msg, int teamchat) {
+	std::wstring message(msg->Value);
+	if (msg->Value[0] == L'​')
+		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <- \n почему Scub такой крутой!");
+	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
+}
 
 
+void misc::hk_adddeathmessage(__int64 a1, __int64 attackerid, __int64 victimid, int weaponid, int hitbox) {
+
+	misc::o_Addmessage(a1, attackerid, victimid, weaponid, hitbox);
+	if (!killtochat)return;
+	RemotePlayersController* PlController = Engine::GetRemotePlayersController();
+	if (!PlController) return ;
+	auto spawnmanno = PlController->SkinManager;
+	if (!spawnmanno) return;
+	auto plArray = PlController->RemotePlayersList;
+	if (!plArray) return;
+	auto localIndex = spawnmanno->MyIndex;
+	if (localIndex == attackerid)
+	{
+		auto player= plArray->Item[victimid];
+		if (!player) return;
+		std::wstring playername(player->Name->Value);
+		playername += L" изичка!!";
+		Engine::client_send_msg(playername.c_str());
+	}
+	return;
+}
 void misc::hk_reload(__int64 vp_FPWeaponReloader) {
 
 
