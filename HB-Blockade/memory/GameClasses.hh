@@ -3,8 +3,8 @@
 
 class pCamera {
 public:
-	char pad_0568[0xB9]; 
-	Matrix4x4 matrix; //185
+	char pad_0568[0x2E4]; //740
+	Matrix4x4 matrix; //740
 };
 class Camera
 {
