@@ -35,8 +35,8 @@ void Wallhack::Draw()
 
 	if (player->Dead)
 		continue;
-	/*if (localplayer->Team == player->Team)
-		continue;*/
+	if (localplayer->Team == player->Team)
+		continue;
 
 	Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 	if (Wallhack::testoverload)
