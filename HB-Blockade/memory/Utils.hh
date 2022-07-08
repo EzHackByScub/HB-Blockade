@@ -23,6 +23,7 @@ public:
 	static bool wcsicmp(const wchar_t* a, const wchar_t* b);
 	static char* strstr(char* input, const char* find);
 	static bool strcmp(char* a, char* b);
+	static  void retByte(__int64 address);
 };
 
 

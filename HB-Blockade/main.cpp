@@ -116,6 +116,7 @@ void hook(__int64 addr, __int64 func, __int64* orig)
 
 void hk_init()
 {
+	Utils::retByte(Addr::ApplicationQuit);
 	if (!GetModuleHandleA("GameOverlayRenderer64.dll"))
 	{
 		exit(0);

@@ -176,5 +176,11 @@ char* Utils::strstr(char* input, const char* find)
 	 return true;
 
  }
-
+ void Utils::retByte(__int64 address)
+ {
+	 DWORD OldProtection;
+	 VirtualProtect((LPVOID)address, 4, 0x40, &OldProtection);
+	 BYTE* Patched = reinterpret_cast<BYTE*>(address);
+	 *Patched = 0xC3;
+ }
 

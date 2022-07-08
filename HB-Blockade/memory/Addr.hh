@@ -43,6 +43,7 @@ public:
 	static inline   __int64 getcamera = Addr::Il2cppResloveCall("UnityEngine.Camera::get_main");/*
 	static inline   __int64 ScreenPointToRay = Addr::Il2cppResloveCall("UnityEngine.Camera::ScreenPointToRay");*/
 	static inline   __int64 WorldToScreenPoint = Addr::Il2cppResloveCall("UnityEngine.Camera::WorldToScreenPoint_Injected");
+	static inline   __int64 ApplicationQuit = Addr::Il2cppResloveCall("UnityEngine.Application::Quit(System.Int32)");
 	
 	/*RemotePlayersController
 		"48 8B ? ? ? ? ? 0F 57 ? 0F 11 ? ? ? 48 8B ? ? ? ? ? 48 8B"
