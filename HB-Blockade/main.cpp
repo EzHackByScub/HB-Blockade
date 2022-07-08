@@ -88,7 +88,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
 	ImGui::Checkbox("force headshot", &misc::force_headshot);
 	ImGui::Checkbox("Kill to chat", &misc::killtochat);
-	ImGui::Checkbox("Granade Teleport", &misc::killtochat);
+	ImGui::Checkbox("Granade Teleport", &misc::GranadeTeleport);
 	ImGui::Checkbox("Promote", &misc::active_spam);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 
