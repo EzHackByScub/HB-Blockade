@@ -30,8 +30,38 @@ void __fastcall misc::hk_sendattack(__int64 client, char a2, unsigned int a3, un
 void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System::String* msg, int teamchat) {
 	std::wstring message(msg->Value);
 	if (msg->Value[0] == L'​')
-		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <-");		
+		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <-");
+		
 	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
+}
+void __fastcall misc::hk_detonatyeev(__int64* client, int uid, Vec3 pos) {
+	if(!GranadeTeleport) return misc::o_send_detenoteevent(client, uid, pos);
+	RemotePlayersController* PlController = Engine::GetRemotePlayersController();
+	if (!PlController) return misc::o_send_detenoteevent(client, uid, pos);
+	auto plArray = PlController->RemotePlayersList;
+	if (!plArray) return misc::o_send_detenoteevent(client, uid, pos);
+	auto spawnmanno = PlController->SkinManager;
+	if (!spawnmanno)return misc::o_send_detenoteevent(client, uid, pos);
+	auto localIndex = spawnmanno->MyIndex;
+	if (localIndex > plArray->Count || localIndex < 0) return;
+	auto localplayer = plArray->Item[localIndex];
+	if (!localplayer) return misc::o_send_detenoteevent(client, uid, pos);
+	for (size_t i = 0; i < plArray->Count; i++)
+	{
+		auto player = plArray->Item[i];
+		if (!player)
+			continue;
+
+		if (player->Dead)
+			continue;
+		if (localplayer->Team == player->Team)
+			continue;
+		if (player->botPoser->isProtected)
+			continue;
+		pos = player->position;
+		return misc::o_send_detenoteevent(client, uid, pos);
+	}
+	return misc::o_send_detenoteevent(client, uid, pos);
 }
 
 

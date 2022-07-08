@@ -88,6 +88,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
 	ImGui::Checkbox("force headshot", &misc::force_headshot);
 	ImGui::Checkbox("Kill to chat", &misc::killtochat);
+	ImGui::Checkbox("Granade Teleport", &misc::killtochat);
 	ImGui::Checkbox("Promote", &misc::active_spam);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 
@@ -135,6 +136,7 @@ void hk_init()
 	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
 	MH_CreateHook((void*)Addr::AddDeathMsg, &misc::hk_adddeathmessage, reinterpret_cast<void**>(&misc::o_Addmessage));
 	MH_CreateHook((void*)Addr::AddMessageChat, &misc::hk_ChatMessage, reinterpret_cast<void**>(&misc::o_ChatMessage));
+	MH_CreateHook((void*)Addr::send_detonateent, &misc::hk_detonatyeev, reinterpret_cast<void**>(&misc::o_send_detenoteevent));
 	MH_EnableHook(MH_ALL_HOOKS);
 	// client_sendattack
 
