@@ -88,9 +88,6 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
 	ImGui::Checkbox("force headshot", &misc::force_headshot);
 	ImGui::Checkbox("Promote", &misc::active_spam);
-	ImGui::SliderInt("buf", &Engine::buf, 0, 2000);
-	if (ImGui::Button(("reset"), ImVec2(100.f, 0.f)))
-		Engine::buf = 0;
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 
 
