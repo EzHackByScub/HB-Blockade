@@ -85,6 +85,20 @@ Vec3*  Engine::GameObject_GetPosition(__int64 Gameobject)
 		return &nullvec;
 	return Engine::InternalTransform_GetPosition(intTransform);
 }
+bool Engine::WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position)  // string to find in IDA    UnityEngine.Camera::get_main() __int64 Camerauncashed, Vector3 inScreenPos, float* positionTarget, unsigned __int8 eye, BYTE* a5
+{
+	Vec3 tvec{ came->m_cashedptr->matrix._14, came->m_cashedptr->matrix._24, came->m_cashedptr->matrix._34 };
+	Vec3 rvec{ came->m_cashedptr->matrix._11, came->m_cashedptr->matrix._21, came->m_cashedptr->matrix._31 };
+	Vec3 upvec{ came->m_cashedptr->matrix._12, came->m_cashedptr->matrix._22, came->m_cashedptr->matrix._32 };
+	float w = tvec.Dot(position) + came->m_cashedptr->matrix._44;
+	if (w < 0.098f)
+		return false;
+	float y = upvec.Dot(position) + came->m_cashedptr->matrix._42;
+	float x = rvec.Dot(position) + came->m_cashedptr->matrix._41;
+	wtsvec->x = (ImGui::GetIO().DisplaySize.x / 2) * (1.f + x / w);
+	wtsvec->y = (ImGui::GetIO().DisplaySize.y / 2) * (1.f - y / w);
+	return true;
+}
 
 //  UnityEngine.Camera::WorldToScreenPoint_Injected(UnityEngine.Vector3&,UnityEngine.Camera/MonoOrStereoscopicEye,UnityEngine.Vector3&)
 bool Engine::Worldtoscreen(Camera* camera, Vec3 position ,Vec3* wtsvec)

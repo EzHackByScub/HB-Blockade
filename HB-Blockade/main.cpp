@@ -6,7 +6,7 @@
 #include "memory/minhook/include/MinHook.h"
 #include <cstdio>
 #include <iostream>
-
+#include "memory/Engine.hh"
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 Present oPresent;
@@ -88,7 +88,9 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
 	ImGui::Checkbox("force headshot", &misc::force_headshot);
 	ImGui::Checkbox("Promote", &misc::active_spam);
-
+	ImGui::SliderInt("buf", &Engine::buf, 0, 2000);
+	if (ImGui::Button(("reset"), ImVec2(100.f, 0.f)))
+		Engine::buf = 0;
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 
 
@@ -121,9 +123,9 @@ void hk_init()
 	{
 		exit(0);
 	}
-	/*AllocConsole();
+	AllocConsole();
 	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);*/
+	freopen_s(&f, "CONOUT$", "w", stdout);
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)

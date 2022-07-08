@@ -15,7 +15,7 @@ void misc::Promote()
 	{
 		timeoutcalls = 600;
 	}
-		Engine::client_send_msg(L"-> yougame.biz мю чцеиле аеяокюрмши вхр акъ асдс!  <-");
+		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade мю цхруюае аеяокюрмши вхр акъ асдс!  <-");
 }
 
 
