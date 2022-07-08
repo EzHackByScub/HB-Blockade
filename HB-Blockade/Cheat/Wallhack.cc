@@ -55,7 +55,11 @@ void Wallhack::Draw()
 	if (width < 0)
 		width = -width;
 
+	if(!player->botPoser->isProtected)
 	ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 255,255,255,255 }, 2, 15, 2);
+	else if (player->botPoser->isProtected)
+		ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 0,0,255,255 }, 2, 15, 2);
+	}
 
 
 
