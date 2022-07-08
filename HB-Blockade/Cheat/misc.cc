@@ -30,7 +30,7 @@ void __fastcall misc::hk_sendattack(__int64 client, char a2, unsigned int a3, un
 void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System::String* msg, int teamchat) {
 	std::wstring message(msg->Value);
 	if (msg->Value[0] == L'​')
-		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <- \n почему Scub такой крутой!");
+		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <-");		
 	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
 }
 
