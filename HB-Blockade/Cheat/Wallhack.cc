@@ -1,6 +1,7 @@
 #include "Wallhack.hh"
 #include "../memory/Engine.hh"
 #include "../imgui/imgui.h"
+#include "misc.hh"
 
 void Wallhack::Draw()
 {
@@ -37,6 +38,8 @@ void Wallhack::Draw()
 		continue;
 	if (localplayer->Team == player->Team)
 		continue;
+	__int64* client = Engine::GetClient();
+	if (!client) return;
 
 	Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 	if (Wallhack::testoverload)

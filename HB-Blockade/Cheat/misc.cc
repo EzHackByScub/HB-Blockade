@@ -34,6 +34,7 @@ void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System:
 		
 	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
 }
+
 void __fastcall misc::hk_detonatyeev(__int64* client, int uid, Vec3 pos) {
 	if(!GranadeTeleport) return misc::o_send_detenoteevent(client, uid, pos);
 	RemotePlayersController* PlController = Engine::GetRemotePlayersController();
@@ -59,7 +60,7 @@ void __fastcall misc::hk_detonatyeev(__int64* client, int uid, Vec3 pos) {
 		if (player->botPoser->isProtected)
 			continue;
 		pos = player->position;
-		return misc::o_send_detenoteevent(client, uid, pos);
+		uidbuf = uid;
 	}
 	return misc::o_send_detenoteevent(client, uid, pos);
 }

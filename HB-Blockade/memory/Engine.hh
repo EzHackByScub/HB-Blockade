@@ -22,6 +22,7 @@ public:
 	static bool Worldtoscreen(Camera* camera, Vec3 position, Vec3* wtsvec);
 	static bool WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position);
 	static bool LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo);
+	static  void  send_exploid(__int64* client, int uid, Vec3 pos);
 	inline static int buf = 185;
 
 

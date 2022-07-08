@@ -21,6 +21,7 @@ public:
 
 	static inline  bool fast_reload = true;
 	static inline  bool auto_reload = true;
+	static inline int uidbuf = 0;
 
 	static void Promote();
 	static inline client_send_attack o_sendattack;
