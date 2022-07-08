@@ -120,9 +120,9 @@ void hk_init()
 	{
 		exit(0);
 	}
-	AllocConsole();
+	/*AllocConsole();
 	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);
+	freopen_s(&f, "CONOUT$", "w", stdout);*/
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
