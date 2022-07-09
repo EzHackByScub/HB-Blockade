@@ -74,6 +74,9 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 			continue;
 		if (localplayer->Team == player->Team) continue;
 
+		auto botsacke = player->botEquipment;
+		if (!botsacke) continue;
+
 		Vec3 scrPos;
 		Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 
@@ -100,7 +103,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					float cmpPoz = hit.m_Point.z - entitybody.z;
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
-						player->myshitforvischeck = 1;						
+						botsacke->myshitforvischeck = 1;
 					}
 				}
 
@@ -112,7 +115,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					float cmpPoz = hit.m_Point.z - entitybody.z;
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
-						player->myshitforvischeck = 1;
+						botsacke->myshitforvischeck = 1;
 					}
 				}
 
@@ -125,13 +128,13 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					float cmpPoz = hit.m_Point.z - entitybody.z;
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
-						player->myshitforvischeck = 1;
+						botsacke->myshitforvischeck = 1;
 					}
 				}
-				if (player->myshitforvischeck)
+				if (botsacke->myshitforvischeck)
 				{
 					Engine::Fire(vp_FPWeaponShooter);
-					player->myshitforvischeck = 0;
+					botsacke->myshitforvischeck = 0;
 				}
 
 			}

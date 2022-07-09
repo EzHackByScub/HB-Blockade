@@ -39,8 +39,10 @@ namespace System
 }
 class BotEquipment {
 public:
-	char pad_0000[0x78]; //0x0000
-	__int64 GameObject_m_top;
+	char pad_0000[8]; //0x0000
+	__int8 myshitforvischeck;
+	char pad_0010[104]; //0x0010
+	__int64 GameObject_m_top; //0x78
 	__int64 GameObject_m_face;
 };
 class BotPoser {
