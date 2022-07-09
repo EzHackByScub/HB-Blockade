@@ -35,6 +35,9 @@ void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System:
 		
 	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
 }
+bool __fastcall misc::hk_ABTest_IsActive() {		
+	return 0;
+}
 void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* a3) {
 	if (1 > 9)
 	{

@@ -115,14 +115,12 @@ void hook(__int64 addr, __int64 func, __int64* orig)
 
 void hk_init()
 {
-	Utils::retByte(Addr::ApplicationQuit);
 	if (!GetModuleHandleA("GameOverlayRenderer64.dll"))
-	{
 		exit(0);
-	}
-	AllocConsole();
+
+	/*AllocConsole();
 	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);
+	freopen_s(&f, "CONOUT$", "w", stdout);*/
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
@@ -135,6 +133,7 @@ void hk_init()
 	MH_CreateHook((void*)Addr::AddDeathMsg, &misc::hk_adddeathmessage, reinterpret_cast<void**>(&misc::o_Addmessage));
 	MH_CreateHook((void*)Addr::AddMessageChat, &misc::hk_ChatMessage, reinterpret_cast<void**>(&misc::o_ChatMessage));
 	MH_CreateHook((void*)Addr::send_detonateent, &misc::hk_detonatyeev, reinterpret_cast<void**>(&misc::o_send_detenoteevent));
+	MH_CreateHook((void*)Addr::ABTest_IsActive, &misc::hk_ABTest_IsActive, reinterpret_cast<void**>(&misc::o_ABTest_IsActive));
 	MH_CreateHook((void*)Addr::UpdateFire, &misc::hk_fire, reinterpret_cast<void**>(&misc::o_Fire));
 	MH_EnableHook(MH_ALL_HOOKS);
 	// client_sendattack
