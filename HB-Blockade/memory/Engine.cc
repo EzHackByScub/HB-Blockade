@@ -129,6 +129,11 @@ bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 {
 	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* client, int uid, Vec3 pos)>(Addr::send_detonateent);
 	return sendreload(client, uid, pos);
+} 
+ void  Engine::Fire(__int64* vp_FPWeaponShooter)
+{
+	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* vp_FPWeaponShooter)>(Addr::TryFire);
+	return sendreload(vp_FPWeaponShooter);
 }
   void  Engine::send_prereload(int wid)
 {

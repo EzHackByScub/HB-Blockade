@@ -148,7 +148,7 @@ public:
 	void* csrm; //0x0068
 	void* pgoLocalPlayer; //0x0070
 	void* csig; //0x0078
-	void* goCurrentPlayer; //0x0080
+	uintptr_t* goCurrentPlayer; //0x0080
 	void* mg; //0x0088
 	class RemotePlayersDataArray* RemotePlayersList; //0x0090
 	float zmupdate; //0x0098

@@ -43,6 +43,8 @@ public:
 	static inline __int64 AddMessageChat = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 80 7B 21 00 0F 29 74 24", "GameAssembly.dll"),1,5);
 	static inline __int64 send_createent = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 8B 97 ? ? ? ? FF CA", "GameAssembly.dll"),1,5);
 	static inline __int64 send_detonateent = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 48 8B 47 50 48 85 C0 0F 84 ? ? ? ? 8B 40 18", "GameAssembly.dll"),1,5);
+	static inline __int64 TryFire = Utils::sigscan("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 48 8B F9 75 5B ", "GameAssembly.dll");
+	static inline __int64 UpdateFire = Utils::sigscan("48 89 5C 24 ? 57 48 83 EC 50 80 3D ? ? ? ? ? 48 8B F9 75 67", "GameAssembly.dll");
 
 	static inline __int64 weapon_raycast_call_unity_raycast = Utils::sigscan("48 8D ? ? E8 ? ? ? ? 84 C0 0F 84 ? ? ? ? 45 33 ? 48 8D ? ? 48 8D ? ? E8", "GameAssembly.dll")+4;
 	static inline   __int64 getcamera = Addr::Il2cppResloveCall("UnityEngine.Camera::get_main");/*

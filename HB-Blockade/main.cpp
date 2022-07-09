@@ -34,9 +34,6 @@ LRESULT __stdcall WndProc(const HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 bool show;
 bool init = false;
-
-
-static inline const wchar_t buf[255] = L"Japrajah";
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	if (!init)
@@ -90,6 +87,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Kill to chat", &misc::killtochat);
 	ImGui::Checkbox("Granade Teleport", &misc::GranadeTeleport);
 	ImGui::Checkbox("Promote", &misc::active_spam);
+	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 
 
@@ -122,9 +120,9 @@ void hk_init()
 	{
 		exit(0);
 	}
-	//AllocConsole();
-	//FILE* f;
-	//freopen_s(&f, "CONOUT$", "w", stdout);
+	AllocConsole();
+	FILE* f;
+	freopen_s(&f, "CONOUT$", "w", stdout);
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
@@ -136,7 +134,7 @@ void hk_init()
 	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
 	MH_CreateHook((void*)Addr::AddDeathMsg, &misc::hk_adddeathmessage, reinterpret_cast<void**>(&misc::o_Addmessage));
 	MH_CreateHook((void*)Addr::AddMessageChat, &misc::hk_ChatMessage, reinterpret_cast<void**>(&misc::o_ChatMessage));
-	MH_CreateHook((void*)Addr::send_detonateent, &misc::hk_detonatyeev, reinterpret_cast<void**>(&misc::o_send_detenoteevent));
+	MH_CreateHook((void*)Addr::UpdateFire, &misc::hk_fire, reinterpret_cast<void**>(&misc::o_Fire));
 	MH_EnableHook(MH_ALL_HOOKS);
 	// client_sendattack
 

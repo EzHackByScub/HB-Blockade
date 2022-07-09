@@ -23,6 +23,7 @@ public:
 	static bool WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position);
 	static bool LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo);
 	static  void  send_exploid(__int64* client, int uid, Vec3 pos);
+	static  void  Fire(__int64* vp_FPWeaponShooter);
 	inline static int buf = 185;
 
 
