@@ -37,7 +37,7 @@ bool __fastcall misc::hk_ABTest_IsActive() {
 	return 0;
 }
 void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* a3) {
-	
+
 	if (1 > 9)
 	{
 	outhk:
@@ -49,7 +49,8 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 
 	RemotePlayersController* PlController = Engine::GetRemotePlayersController();
 	if (!PlController) 	goto outhk;
-
+	auto weaponsystem = Engine::GetWeaponSystem();
+	if (!weaponsystem) return;
 	auto plArray = PlController->RemotePlayersList;
 	if (!plArray) 	goto outhk;
 
@@ -88,7 +89,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 
 		if (localpos->y == -1000) continue;
 		Vec3 localposs = { localpos->x, 1.65f + localpos->y ,localpos->z };
-		if (Engine::WorldtoscreenTestWh(camrt,  &scrPos, entitybody))
+		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 		{
 			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
 			float y = scrPos.y - (float)Global_vars::ScreenH / 2;
@@ -136,7 +137,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 				entitybody = { entitypos->x,0.5f + entitypos->y  ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-				//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
+					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
 					float cmpPosx = hit.m_Point.x - entitybody.x;
 					float cmpPosy = hit.m_Point.y - entitybody.y;
 					//48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 41 8B F1 41 8B E8 0F B6 DA 
@@ -152,16 +153,19 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 						botsacke->myshitforvischeck = 0;
 					}
 				}
-				if (!autoshoot) goto outhk;
-				if (botsacke->myshitforvischeck)
+
+				if (player->isVisible)
 				{
 					Engine::Fire(vp_FPWeaponShooter);
-					
 				}
+
 
 			}
 		}
+
+
 	}
+	
 
 	goto outhk;
 }

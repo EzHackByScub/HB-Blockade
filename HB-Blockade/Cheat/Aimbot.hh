@@ -10,7 +10,6 @@ public:
 //	static inline ScreenToRay oScreenToRayadr;
 	static inline PhysicsRaycast oRaycast;
 	static bool  Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float a3, int a4);
-	static void DefoltAimbot();
 	
 	static inline float fov = 280;
 

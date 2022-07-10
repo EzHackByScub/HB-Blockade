@@ -70,7 +70,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		
 		Wallhack::Draw();
 		misc::Promote();
-		Aimbot::DefoltAimbot();
+		//Aimbot::DefoltAimbot();
 
 	if (GetAsyncKeyState(VK_INSERT) & 1)
 		show = !show;
@@ -82,15 +82,14 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Begin("Japrajah#5252-Scub#2603-Blockade");
 	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
 	ImGui::Checkbox("Magic Aimbot" ,&misc::MagicAimbot);
-	ImGui::Checkbox("Aimbot" ,&misc::Aimbot);
 	ImGui::Checkbox("ForceNetworkPos" ,&Wallhack::testoverload);
 	ImGui::Checkbox("No_reload" ,&misc::auto_reload);
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
 	ImGui::Checkbox("force headshot", &misc::force_headshot);
 	ImGui::Checkbox("Kill to chat", &misc::killtochat);
-	ImGui::Checkbox("Granade Teleport", &misc::GranadeTeleport);
+	//ImGui::Checkbox("Granade Teleport", &misc::GranadeTeleport);
 	ImGui::Checkbox("Promote", &misc::active_spam);
-	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);
+	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);;
 	ImGui::Checkbox("RainbowEsp", &misc::rainbowesp);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 	if (misc::rainbowesp)

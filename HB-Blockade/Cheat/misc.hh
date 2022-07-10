@@ -23,6 +23,7 @@ public:
 	static inline  bool active_spam = false;
 	static inline  bool fire = false;
 	static inline  bool autoshoot = false;
+	static inline  bool noFov = false;
 
 	static inline  bool fast_reload = true;
 	static inline  bool auto_reload = true;
