@@ -5,6 +5,7 @@
 #include <iostream>
 #include <comdef.h> 
 #include "Aimbot.hh"
+
 int timeoutcalls = 600;
 void misc::Promote()
 {
@@ -33,6 +34,7 @@ void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System:
 		
 	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
 }
+
 bool __fastcall misc::hk_ABTest_IsActive() {		
 	return 0;
 }
@@ -43,12 +45,14 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 	outhk:
 		return o_Fire(vp_FPWeaponShooter, a2, a3);
 	}
+	if(!autoshoot) 	goto outhk;
 	Camera* camrt = Engine::GetCameraMain();
 	if (camrt == nullptr)
 		goto outhk;
 
 	RemotePlayersController* PlController = Engine::GetRemotePlayersController();
 	if (!PlController) 	goto outhk;
+
 	auto weaponsystem = Engine::GetWeaponSystem();
 	if (!weaponsystem) return;
 	auto plArray = PlController->RemotePlayersList;
@@ -64,6 +68,14 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 	if (localIndex > plArray->Count || localIndex < 0) goto outhk;
 	auto localplayer = plArray->Item[localIndex];
 	if (!localplayer) goto outhk;
+	/*if (misc::createplayer)
+	{
+		auto guimanager = Engine::GetGUIManger();
+		if (!guimanager) return;
+		auto HeadShotTexture2D = (__int64*)*(__int64*)((__int64)guimanager + 0x628);
+		Engine::ImageConversion_LoadImage(HeadShotTexture2D, pngBytesbuf);
+		misc::createplayer = 0;
+	}*/
 	for (size_t i = 0; i < plArray->Count; i++)
 	{
 		auto player = plArray->Item[i];
@@ -83,12 +95,12 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 		Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 
 		if (entitypos->y == -1000) continue;
-		Vec3 entitybody = { entitypos->x, 1.65f + entitypos->y ,entitypos->z };
+		Vec3 entitybody = { entitypos->x, 1.65f * misc::bigscale + entitypos->y ,entitypos->z };
 
 		Vec3* localpos = Engine::GameObject_GetPosition((__int64)PlController->goCurrentPlayer);
 
 		if (localpos->y == -1000) continue;
-		Vec3 localposs = { localpos->x, 1.65f + localpos->y ,localpos->z };
+		Vec3 localposs = { localpos->x, 1.65f  + localpos->y ,localpos->z };
 		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 		{
 			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
@@ -114,7 +126,64 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 						botsacke->myshitforvischeck = 0;
 					}
 				}
+				entitybody = { entitypos->x, 1.65f + entitypos->y ,entitypos->z };
+				if (Engine::LineCast(localposs, entitybody, &hit))
+				{
+					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
+					float cmpPosx = hit.m_Point.x - entitybody.x;
+					float cmpPosy = hit.m_Point.y - entitybody.y;
+					float cmpPoz = hit.m_Point.z - entitybody.z;
+					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					{
+						botsacke->myshitforvischeck = 1;
+						player->isVisible = 1;
+					}
+					else
+					{
+						player->isVisible = 0;
+						botsacke->myshitforvischeck = 0;
+					}
+				}
+	
+			
+				entitybody = { entitypos->x, 1.f * misc::bigscale + entitypos->y ,entitypos->z };
+				if (Engine::LineCast(localposs, entitybody, &hit))
+				{
+					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
+					float cmpPosx = hit.m_Point.x - entitybody.x;
+					float cmpPosy = hit.m_Point.y - entitybody.y;
+					float cmpPoz = hit.m_Point.z - entitybody.z;
+					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					{
+						botsacke->myshitforvischeck = 1;
+						player->isVisible = 1;
+					}
+					else
+					{
+						player->isVisible = 0;
+						botsacke->myshitforvischeck = 0;
+					}
+				}
 
+				entitybody = { entitypos->x,0.5f * misc::bigscale + entitypos->y  ,entitypos->z };
+				if (Engine::LineCast(localposs, entitybody, &hit))
+				{
+					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
+					float cmpPosx = hit.m_Point.x - entitybody.x;
+					float cmpPosy = hit.m_Point.y - entitybody.y;
+					//48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 41 8B F1 41 8B E8 0F B6 DA 
+					float cmpPoz = hit.m_Point.z - entitybody.z;
+					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					{
+						botsacke->myshitforvischeck = 1;
+						player->isVisible = 1;
+					}
+					else
+					{
+						player->isVisible = 0;
+						botsacke->myshitforvischeck = 0;
+					}
+				}
 				entitybody = { entitypos->x, 1.f + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
@@ -153,6 +222,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 						botsacke->myshitforvischeck = 0;
 					}
 				}
+
 
 				if (player->isVisible)
 				{
@@ -230,6 +300,53 @@ void misc::hk_reload(__int64 vp_FPWeaponReloader) {
 	return misc::o_reload(vp_FPWeaponReloader);
 
 
+}
+void misc::hk_send_currentweapon(__int64* Client, int weaponid)
+{
+	return misc::o_send_currentweapon(Client,12);
+}
+void misc::hk_FireSpecEffects(__int64* vp_FPWeaponShooter)
+{
+	if (misc::auto_reload)
+	{
+		auto weaponsystem = Engine::GetWeaponSystem();
+		if (!weaponsystem) return misc::o_FireSpecEffects(vp_FPWeaponShooter);
+		if (weaponsystem)
+		{
+			int mwid = *(int*)(weaponsystem + 0x94); // mwid
+			int currentwid = *(int*)((__int64)weaponsystem + 0x120);
+			if (mwid != currentwid)
+			{
+				Engine::send_prereload(currentwid);
+				Engine::send_reload(currentwid);
+				int pwid = *(int*)((__int64)weaponsystem + 0x98);
+				int swid = *(int*)((__int64)weaponsystem + 0x9c);
+
+				
+				if (pwid == currentwid)
+				{
+					if (*(int*)((__int64)weaponsystem + 0xC8) > 0)
+					{
+						*(int*)((__int64)weaponsystem + 0xC0) += 1; // clip
+						*(int*)((__int64)weaponsystem + 0xC8) -= 1; //backpack	
+					}
+				}
+				else if (swid == currentwid)
+				{
+					if (*(int*)((__int64)weaponsystem + 0xD4) > 0)
+					{
+						*(int*)((__int64)weaponsystem + 0xCC) += 1;
+						*(int*)((__int64)weaponsystem + 0xD4) -= 1;
+					}
+				}
+
+
+			}
+		}
+
+		//	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* WS, int wid, float)>(Addr::OnWeaponReloadend);
+	}
+	return misc::o_FireSpecEffects(vp_FPWeaponShooter);
 }
 void misc::hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS) 
 {

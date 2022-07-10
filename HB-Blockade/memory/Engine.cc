@@ -1,7 +1,7 @@
 #include "Engine.hh"
 #include <iostream>
 #include "../imgui/imgui.h"
-
+#include <array>
 
 Camera* Engine::GetCameraMain()
 {
@@ -25,6 +25,15 @@ WeaponSystem* Engine::GetWeaponSystem() {
 	if (a2da < 0x0000000030008649) // 2000BB39
 		return nullptr;
 	WeaponSystem* controller = (WeaponSystem*)*(__int64*)*(__int64*)(a2da + 0xB8);
+	return controller;
+}
+__int64* Engine::GetGUIManger() {
+	if (!Addr::GUIManager)
+		return nullptr;
+	__int64 a2da = *(__int64*)(Addr::GUIManager);
+	if (a2da < 0x0000000030008649) // 2000BB39
+		return nullptr;
+	__int64* controller = (__int64*)*(__int64*)(a2da + 0xB8);
 	return controller;
 }
 
@@ -113,59 +122,7 @@ bool Engine::WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position)  // 
 	wtsvec->y = (ImGui::GetIO().DisplaySize.y / 2) * (1.f - y / w);
 	return true;
 }
-void normalizeAngles(Vec2 angles)
-{
-	while (angles.x > 88.f)
-		angles.x -= 180.f;
 
-	while (angles.x < -88.f)
-		angles.x += 180.f;
-
-	while (angles.y > 180.f)
-		angles.y -= 360.f;
-
-	while (angles.y < -180.f)
-		angles.y += 360.f;
-}
-void clampAngles(Vec2 angles)
-{
-	if (angles.y > 89.0)
-		angles.y = 89.0;
-
-	if (angles.y < -89.0)
-		angles.y = -89.0;
-
-	if (angles.y > 180.0)
-		angles.y = 180.0;
-
-	if (angles.y < -180.0)
-		angles.y = -180.0;
-}
-Vec2 ReturnAngle(Vec2 angle)
-{
-	if (angle.x + 360 > 360)
-		return { angle.x,angle.y + 90 };
-	return { angle.x + 360,angle.y + 90 };
-}
-Vec2 Engine::CalcAngle(Vec3 startPOS, Vec3 endPOS)
-{
-	float deltaX = endPOS.x - startPOS.x;
-	float deltaY = endPOS.y - startPOS.y;
-	float deltaZ = endPOS.z - startPOS.z;
-	float dist = sqrt(pow((endPOS.x - startPOS.x), 2.0) + pow((endPOS.y - startPOS.y), 2.0) + pow((endPOS.z - startPOS.z), 2.0));
-
-	if (dist < 0)
-	{
-		dist = dist * -1;
-	}
-
-	float xzlength = sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
-	float angleX = atan2(deltaY, xzlength) * (-57.2957795);
-	float angleY = atan2(deltaX, deltaZ) * (57.2957795);
-	Vec2 angle = { angleY,angleX };
-	//Vec2 angleRet = ReturnAngle(angle);
-	return  angle;
-}
 
 
 bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
@@ -173,9 +130,9 @@ bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 	const auto line_cast = reinterpret_cast<bool(*)(Vec3* Startpos, Vec3* endpos, RaycastHit * hitinfo)>(Addr::Linecast);
 	return line_cast(&Startpos, &endpos, hitinfo);
 }	
-__int64* Engine::ComponentGetTransform(__int64* Component)
+__int64 Engine::ComponentGetTransform(__int64 Component)
 {
-	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Component)>(Addr::ComponentGetTransform);
+	const auto line_cast = reinterpret_cast<__int64(*)(__int64 Component)>(Addr::ComponentGetTransform);
 	return line_cast(Component);
 }
 __int64 Engine::GetBoneTransforminternal(__int64 Animatorinternal, __int8 boneid)
@@ -197,6 +154,76 @@ __int64* Engine::Assembly_GetType(__int64* Assembly, System::String* name, bool 
 {
 	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Assembly, System::String * name, bool throwOnError)>(Addr::Assembly_GetType);
 	return line_cast(Assembly, name, throwOnError);
+}
+void Engine::CreatePlayer(RemotePlayersController* playercontroller, int playerindex)
+{
+	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * playercontroller, int playerindex)>(Addr::CreatePlayer);
+	return line_cast(playercontroller, playerindex);
+}
+void Engine::RestorePlayer(RemotePlayersController* playercontroller, int playerindex)
+{
+	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * playercontroller, int playerindex)>(Addr::RestorePlayer);
+	return line_cast(playercontroller, playerindex);
+}
+void Engine::SetCurrentWeapon(RemotePlayersController* playercontroller, int playerindex, int weaponid)
+{
+	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * playercontroller, int playerindex, int weaponid)>(Addr::SetCurrentWeapon);
+	return line_cast(playercontroller, playerindex,weaponid);
+}
+void Engine::transform_set_local_scale(__int64 Transform,Vec3* scale)
+{
+	const auto line_cast = reinterpret_cast<void(*)(__int64 Transform, Vec3*  scale)>(Addr::transform_set_local_scale);
+	return line_cast(Transform, scale);
+}
+__int64* Engine::get_skybox()
+{
+	const auto line_cast = reinterpret_cast<__int64*(*)()>(Addr::get_skybox);
+	return line_cast();
+}
+__int64* Engine::material_set_color(__int64* Material, Color color)
+{
+	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Material, Color color)>(Addr::material_set_color);
+	return line_cast(Material,color);
+}
+Color Engine::material_get_color(__int64* Material)
+{
+	const auto line_cast = reinterpret_cast<Color(*)(__int64* Material)>(Addr::material_get_color);
+	return line_cast(Material);
+}
+void Engine::material_set_shader(__int64* Material,__int64* Shader)
+{
+	const auto line_cast = reinterpret_cast<void(*)(__int64* Material, __int64* Shader)>(Addr::material_set_shader);
+	return line_cast(Material,Shader);
+}
+void Engine::material_set_texture(__int64* Material,__int64* Texture)
+{
+	const auto line_cast = reinterpret_cast<void(*)(__int64* Material, __int64* Texture)>(Addr::material_set_texture);
+	return line_cast(Material, Texture);
+}
+__int64* Engine::material_get_main_texture(__int64* Material)
+{
+	const auto line_cast = reinterpret_cast<__int64* (*)(__int64* Material)>(Addr::material_get_main_texture);
+	return line_cast(Material);
+}
+bool Engine::ImageConversion_LoadImage(__int64* Texure2d,byte data[] )
+{
+	const auto line_cast = reinterpret_cast<bool(*)(__int64* Texure2d, byte data[])>(Addr::ImageConversion_LoadImage);
+	return line_cast(Texure2d,data);
+}
+__int64* Engine::ShaderFind(System::String* name)
+{
+	const auto line_cast = reinterpret_cast<__int64* (*)(System::String * name)>(Addr::ShaderFind);
+	return line_cast(name);
+}
+__int64* Engine::Material_get_shader(__int64* Material)
+{
+	const auto line_cast = reinterpret_cast<__int64* (*)(__int64* Material)>(Addr::Material_get_shader);
+	return line_cast(Material);
+}
+__int64* Engine::rendersettings_set_skybox(__int64* Material)
+{
+	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Material)>(Addr::rendersettings_set_skybox);
+	return line_cast(Material);
 }
 __int64* Engine::Component_1_GetComponent(__int64* Component, __int64* Type)
 {

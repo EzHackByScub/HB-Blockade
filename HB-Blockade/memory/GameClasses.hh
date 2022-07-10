@@ -21,6 +21,13 @@
 	 Bip001_L_Hand,
 	 Bip001_R_Hand,
 };
+ typedef struct
+ {
+	 float r;
+	 float g;
+	 float b;
+	 float a;
+ }Color;
  class Assemblies_Array
  {
  public:
@@ -80,6 +87,8 @@ class WeaponSystem
 public:
 	char pad_0000[0x28]; //0x0000
 	vp_FPCamera* camera;
+	char pad_0030[280]; //0x0030
+	__int64* Transform; //0x0148
 };
 class BotEquipment {
 public:
@@ -98,11 +107,7 @@ public:
 };
 class BotPoser {
 public:
-	char pad_0000[0x68]; //0x0000
-	AnimatorList* AnimatorList; //0x0068
-	char pad_0070[8]; //0x0070
-	__int64 anim; //0x0078
-	char pad_0080[24]; //0x0080
+	char pad_0000[0x98]; //0x0000	
 	bool isProtected; //0x98
 };
 class RemotePlayerData
@@ -186,7 +191,6 @@ public:
 	int Count;
 	__int64 Gameobject[];
 };
-
 class RemotePlayersController
 {
 public:

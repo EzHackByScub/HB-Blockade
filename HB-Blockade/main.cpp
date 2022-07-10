@@ -89,9 +89,11 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Kill to chat", &misc::killtochat);
 	//ImGui::Checkbox("Granade Teleport", &misc::GranadeTeleport);
 	ImGui::Checkbox("Promote", &misc::active_spam);
-	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);;
+	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);
 	ImGui::Checkbox("RainbowEsp", &misc::rainbowesp);
+	ImGui::Checkbox("CreatePlayer", &misc::createplayer);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
+	ImGui::SliderFloat("Big" ,&misc::bigscale,1,5);
 	if (misc::rainbowesp)
 	{
 		ImGui::Text("Wave speed: "); ImGui::SameLine();
@@ -136,7 +138,7 @@ void hk_init()
 	Utils::ReplaceCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
 	MH_Initialize();
 	MH_CreateHook((void*)Addr::client_sendattack, &misc::hk_sendattack, reinterpret_cast<void**>(&misc::o_sendattack));
-	MH_CreateHook((void*)Addr::weapon_raycast, &misc::hk_weapon_raycast, reinterpret_cast<void**>(&misc::o_weapon_raycast));
+	MH_CreateHook((void*)Addr::FireSpecEffects, &misc::hk_FireSpecEffects, reinterpret_cast<void**>(&misc::o_FireSpecEffects));
 	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
 	MH_CreateHook((void*)Addr::AddDeathMsg, &misc::hk_adddeathmessage, reinterpret_cast<void**>(&misc::o_Addmessage));
 	MH_CreateHook((void*)Addr::AddMessageChat, &misc::hk_ChatMessage, reinterpret_cast<void**>(&misc::o_ChatMessage));
@@ -144,8 +146,6 @@ void hk_init()
 	MH_CreateHook((void*)Addr::ABTest_IsActive, &misc::hk_ABTest_IsActive, reinterpret_cast<void**>(&misc::o_ABTest_IsActive));
 	MH_CreateHook((void*)Addr::UpdateFire, &misc::hk_fire, reinterpret_cast<void**>(&misc::o_Fire));
 	MH_EnableHook(MH_ALL_HOOKS);
-	// client_sendattack
-
 	return;
 }
 

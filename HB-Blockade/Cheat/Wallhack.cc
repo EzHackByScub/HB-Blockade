@@ -76,6 +76,7 @@ void Wallhack::Draw()
 		if (!player)
 			continue;
 
+
 		if (player->Dead)
 			continue;
 		if (localplayer->Team == player->Team)
@@ -86,7 +87,7 @@ void Wallhack::Draw()
 		Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 		if (Wallhack::testoverload)
 			*entitypos = player->position;
-		Vec3 entytyfix = { entitypos->x,1.65f + entitypos->y ,entitypos->z };
+		Vec3 entytyfix = { entitypos->x,1.65f * misc::bigscale + entitypos->y ,entitypos->z };
 		Vec3 scrposeye;
 		Vec3 scrposfood;
 
@@ -94,6 +95,14 @@ void Wallhack::Draw()
 
 		if (!Engine::WorldtoscreenTestWh(camrt, &scrposeye, entytyfix)) continue;
 		if (!Engine::WorldtoscreenTestWh(camrt, &scrposfood, *entitypos)) continue;
+
+		auto go = BotsGO->Gameobject[i];
+		if (!go) continue;
+		auto internaltransform = Engine::GO_Get_InternalTransform(go);
+		if (!internaltransform) continue;
+		auto trnasform = *(__int64*)(internaltransform + 0x28);
+		Vec3 scale = { misc::bigscale,misc::bigscale,misc::bigscale };
+		Engine::transform_set_local_scale(trnasform, &scale);
 
 		float width = (scrposeye.y - scrposfood.y) * 0.3f;
 
@@ -118,5 +127,7 @@ void Wallhack::Draw()
 		}		
 		else if (botposer->isProtected)
 			ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 0,0,255,255 }, 2, 15, 2);		
+
+	
 	}
 }

@@ -2,13 +2,13 @@
 #include "../memory/Engine.hh"
 #include <iostream>
 #include "misc.hh"
-bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int a4)
+bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int a4,int a5)
 {
 
 	if ( 1 > 9)
 	{
 	outhk:
-		return oRaycast(a1, hitinfo, distance,a4);
+		return oRaycast(a1, hitinfo, distance,a4, a5);
 	}
 	if (!misc::MagicAimbot) 	goto outhk;
 	Camera* camrt = Engine::GetCameraMain();
@@ -47,7 +47,7 @@ bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int
 		Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 
 		if (entitypos->y == -1000) continue;
-		Vec3 entitybody = { entitypos->x, 1.65f + entitypos->y ,entitypos->z };
+		Vec3 entitybody = { entitypos->x, 1.65f * misc::bigscale + entitypos->y ,entitypos->z };
 
 		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 		{
@@ -62,6 +62,45 @@ bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int
 					//if (hit.m_Distance > Aimbot::weapondistance) continue;
 					float cmpPosx = hit.m_Point.x - entitybody.x;
 					float cmpPosy = hit.m_Point.y - entitybody.y;
+					float cmpPoz = hit.m_Point.z - entitybody.z;
+					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					{
+						return Engine::LineCast(a1.StartPosition, entitybody, hitinfo);
+					}
+				}
+				 entitybody = { entitypos->x, 1.65f + entitypos->y ,entitypos->z };
+				 if (Engine::LineCast(a1.StartPosition, entitybody, &hit))
+				 {
+					 //if (hit.m_Distance > Aimbot::weapondistance) continue;
+					 float cmpPosx = hit.m_Point.x - entitybody.x;
+					 float cmpPosy = hit.m_Point.y - entitybody.y;
+					 float cmpPoz = hit.m_Point.z - entitybody.z;
+					 if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					 {
+						 return Engine::LineCast(a1.StartPosition, entitybody, hitinfo);
+					 }
+				 }
+
+				entitybody = { entitypos->x, 1.f  * misc::bigscale + entitypos->y ,entitypos->z };
+				if (Engine::LineCast(a1.StartPosition, entitybody, &hit))
+				{
+					//if (hit.m_Distance > Aimbot::weapondistance) continue;
+					float cmpPosx = hit.m_Point.x - entitybody.x;
+					float cmpPosy = hit.m_Point.y - entitybody.y;
+					float cmpPoz = hit.m_Point.z - entitybody.z;
+					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					{
+						return Engine::LineCast(a1.StartPosition, entitybody, hitinfo);
+					}
+				}
+
+				entitybody = { entitypos->x,0.5f * misc::bigscale + entitypos->y  ,entitypos->z };
+				if (Engine::LineCast(a1.StartPosition, entitybody, &hit))
+				{
+					//if (hit.m_Distance > Aimbot::weapondistance) continue;
+					float cmpPosx = hit.m_Point.x - entitybody.x;
+					float cmpPosy = hit.m_Point.y - entitybody.y;
+					//48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 41 8B F1 41 8B E8 0F B6 DA 
 					float cmpPoz = hit.m_Point.z - entitybody.z;
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
