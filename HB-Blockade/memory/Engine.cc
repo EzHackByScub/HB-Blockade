@@ -18,6 +18,15 @@ RemotePlayersController* Engine::GetRemotePlayersController() {
 	RemotePlayersController* controller = (RemotePlayersController*)*(__int64*)*(__int64*)(a2da + 0xB8);
 	return controller;
 }
+WeaponSystem* Engine::GetWeaponSystem() {
+	if (!Addr::WeaponSystemBase)
+		return nullptr;
+	__int64 a2da = *(__int64*)(Addr::WeaponSystemBase);
+	if (a2da < 0x0000000030008649) // 2000BB39
+		return nullptr;
+	WeaponSystem* controller = (WeaponSystem*)*(__int64*)*(__int64*)(a2da + 0xB8);
+	return controller;
+}
 
 __int64* Engine::GetClient() {
 	if (!Addr::Clinet)
@@ -59,15 +68,20 @@ Vec3*  Engine::InternalTransform_GetPosition(__int64 internal_transform)
 	Vec3* TransformPositon = (Vec3*)(PositionTable + static_cast<__int64>(TransformIndex) * 48);
 	return TransformPositon;
 }
+__int64  Engine::InterGO_Get_InternalTransform(__int64 Gameobject)
+{
+	auto gameObject_components = *(__int64*)(Gameobject + 0x30);
+	if (!gameObject_components) return 0;
+	auto gameObject_internal_transform = *(__int64*)(gameObject_components + 0x8);
+	return gameObject_internal_transform;
+}
 __int64  Engine::GO_Get_InternalTransform (__int64 Gameobject)
 {
 	auto internal_gameObject = *(__int64*)(Gameobject + 0x10);
 	if (!internal_gameObject) return 0;
-	auto gameObject_components = *(__int64*)(internal_gameObject + 0x30);
-	if (!gameObject_components) return 0;
-	auto gameObject_internal_transform = *(__int64*)(gameObject_components + 0x8);
-		return gameObject_internal_transform;
+		return InterGO_Get_InternalTransform(internal_gameObject);
 }
+
 
 const char*  Engine::GameObject_GetName(__int64 Gameobject)
 {
@@ -99,25 +113,106 @@ bool Engine::WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position)  // 
 	wtsvec->y = (ImGui::GetIO().DisplaySize.y / 2) * (1.f - y / w);
 	return true;
 }
-
-//  UnityEngine.Camera::WorldToScreenPoint_Injected(UnityEngine.Vector3&,UnityEngine.Camera/MonoOrStereoscopicEye,UnityEngine.Vector3&)
-bool Engine::Worldtoscreen(Camera* camera, Vec3 position ,Vec3* wtsvec)
+void normalizeAngles(Vec2 angles)
 {
-	const auto WorldToScreenPoint_Injected = reinterpret_cast <void(*)(Camera* cam,Vec3* targetpos, unsigned int eye,Vec3* ScreenPos)>(Addr::WorldToScreenPoint);
-	WorldToScreenPoint_Injected(camera,&position, 2,wtsvec);
-	if (wtsvec->z <= 1) 
-		return false;
-	wtsvec->y = Global_vars::ScreenH - wtsvec->y;
-	return  true;
+	while (angles.x > 88.f)
+		angles.x -= 180.f;
+
+	while (angles.x < -88.f)
+		angles.x += 180.f;
+
+	while (angles.y > 180.f)
+		angles.y -= 360.f;
+
+	while (angles.y < -180.f)
+		angles.y += 360.f;
 }
+void clampAngles(Vec2 angles)
+{
+	if (angles.y > 89.0)
+		angles.y = 89.0;
+
+	if (angles.y < -89.0)
+		angles.y = -89.0;
+
+	if (angles.y > 180.0)
+		angles.y = 180.0;
+
+	if (angles.y < -180.0)
+		angles.y = -180.0;
+}
+Vec2 ReturnAngle(Vec2 angle)
+{
+	if (angle.x + 360 > 360)
+		return { angle.x,angle.y + 90 };
+	return { angle.x + 360,angle.y + 90 };
+}
+Vec2 Engine::CalcAngle(Vec3 startPOS, Vec3 endPOS)
+{
+	float deltaX = endPOS.x - startPOS.x;
+	float deltaY = endPOS.y - startPOS.y;
+	float deltaZ = endPOS.z - startPOS.z;
+	float dist = sqrt(pow((endPOS.x - startPOS.x), 2.0) + pow((endPOS.y - startPOS.y), 2.0) + pow((endPOS.z - startPOS.z), 2.0));
+
+	if (dist < 0)
+	{
+		dist = dist * -1;
+	}
+
+	float xzlength = sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
+	float angleX = atan2(deltaY, xzlength) * (-57.2957795);
+	float angleY = atan2(deltaX, deltaZ) * (57.2957795);
+	Vec2 angle = { angleY,angleX };
+	//Vec2 angleRet = ReturnAngle(angle);
+	return  angle;
+}
+
 
 bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 {
 	const auto line_cast = reinterpret_cast<bool(*)(Vec3* Startpos, Vec3* endpos, RaycastHit * hitinfo)>(Addr::Linecast);
 	return line_cast(&Startpos, &endpos, hitinfo);
-
-
 }	
+__int64* Engine::ComponentGetTransform(__int64* Component)
+{
+	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Component)>(Addr::ComponentGetTransform);
+	return line_cast(Component);
+}
+__int64 Engine::GetBoneTransforminternal(__int64 Animatorinternal, __int8 boneid)
+{
+	const auto line_cast = reinterpret_cast<__int64(*)(__int64 Animatorinternal, __int8 boneid)>(Addr::GetBoneTransforminternal);
+	return line_cast(Animatorinternal, boneid);
+}
+__int64 Engine::AppDomain_getCurDomain()
+{
+	const auto line_cast = reinterpret_cast<__int64(*)()>(Addr::AppDomain_getCurDomain);
+	return line_cast();
+}
+Assemblies_Array Engine::AppDomain_GetAssemblies(__int64 AppDomain, bool refOnly)
+{
+	const auto line_cast = reinterpret_cast<Assemblies_Array(*)(__int64 AppDomain, bool refOnly)>(Addr::AppDomain_GetAssemblies);
+	return line_cast(AppDomain, refOnly);
+}
+__int64* Engine::Assembly_GetType(__int64* Assembly, System::String* name, bool throwOnError)
+{
+	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Assembly, System::String * name, bool throwOnError)>(Addr::Assembly_GetType);
+	return line_cast(Assembly, name, throwOnError);
+}
+__int64* Engine::Component_1_GetComponent(__int64* Component, __int64* Type)
+{
+	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Component, __int64* Type)>(Addr::Component_1_GetComponent);
+	return line_cast(Component, Type);
+}
+void Engine::TransformGetPosition(__int64* Transform, Vec3* vector_out)
+{
+	const auto GetCam = reinterpret_cast <void(*)(__int64* Transform, Vec3 * vector_out)>(Addr::TransformGetPos);
+	return GetCam(Transform, vector_out);
+}
+__int64* Engine::GameObjectFind(System::String* name)
+{
+	const auto GetCam = reinterpret_cast <__int64* (*)(System::String * name)>(Addr::GameObjectFind);
+	return GetCam(name);
+}
  void  Engine::send_reload(int wid)
 {
 	 auto client = Engine::GetClient();
@@ -134,6 +229,11 @@ bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 {
 	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* vp_FPWeaponShooter)>(Addr::TryFire);
 	return sendreload(vp_FPWeaponShooter);
+} 
+ __int64*  Engine::TransformFind(__int64* transform,System::String* name, bool xz)
+{
+	const auto sendreload = reinterpret_cast<__int64* (__fastcall*)(__int64* transform, System::String * name, bool xz)>(Addr::TransformFind);
+	return sendreload(transform,name, xz);
 }
   void  Engine::send_prereload(int wid)
 {

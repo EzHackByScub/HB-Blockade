@@ -10,6 +10,7 @@ typedef void(__fastcall* ChatMessage)(__int64* Chat, int index, int team, System
 typedef void(__fastcall* sendCreateEvent)(__int64* client, Vec3 pos, Vec3 rot, Vec3 force, Vec3 torque, __int8 enttypeid);
 typedef void(__fastcall* senddetonateent)(__int64* client, int uid, Vec3 pos);
 typedef bool(__fastcall* ABTest_IsActive)();
+typedef void(__fastcall* GameController_Update)(__int64* a1);
 typedef void(__fastcall* Fire)(__int64* vp_FPWeaponShooter, __int64 a2, __int64* a3);
 
 //   public void newweapon_raycast(System.Int32 wid, System.Single dist, System.Int32 blockdist, WeaponSystem WS)
@@ -25,7 +26,11 @@ public:
 
 	static inline  bool fast_reload = true;
 	static inline  bool auto_reload = true;
+	static inline bool MagicAimbot = true;
+	static inline bool Aimbot = true;
+	static inline  bool rainbowesp = false;
 	static inline int uidbuf = 0;
+	static inline int	rainbowdelay = 0;
 
 	static void Promote();
 	static inline client_send_attack o_sendattack;
@@ -37,6 +42,7 @@ public:
 	static inline senddetonateent o_send_detenoteevent;
 	static inline ABTest_IsActive o_ABTest_IsActive;
 	static inline Fire o_Fire;
+	static inline GameController_Update o_GameController_Update;
 
 	static void hk_sendattack(__int64 client, char a2, unsigned int a3, unsigned int a4, char a5, char hitboxid, int alter_damage, int ax, int  ay, int az, int vx, int vy, int vz, int x1, int y1, int z1, int x2, int y2, int z2);
 	static void hk_reload( __int64 a1);
@@ -47,5 +53,6 @@ public:
 	static void hk_detonatyeev(__int64* client, int uid, Vec3 pos);
 	static void  hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* a3);
 	static bool  hk_ABTest_IsActive();
+	static void hk_GameController_Update(__int64* a1);
 };
 

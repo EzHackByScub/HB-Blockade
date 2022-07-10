@@ -1,6 +1,38 @@
 #pragma once
 #include "Vectors.hh"
-
+ enum HumanBodyBones : __int8
+ {
+	 Bip001_Pelvis,
+	 Bip001_L_Thigh,
+	 Bip001_R_Thigh,
+	 Bip001_L_Calf,
+	 Bip001_R_Calf,
+	 Bip001_L_Foot,
+	 Bip001_R_Foot,
+	 Bip001_Spine,
+	 Bip001_Neck,
+	 Bip001_Head,
+	 Bip001_L_Clavicle,
+	 Bip001_R_Clavicle,
+	 Bip001_L_UpperArm,
+	 Bip001_R_UpperArm,
+	 Bip001_L_Forearm,
+	 Bip001_R_Forearm,
+	 Bip001_L_Hand,
+	 Bip001_R_Hand,
+};
+ class Assemblies_Array
+ {
+ public:
+	 char pad_0568[0x20]; //740
+	 __int64* Assembly[72];
+ };
+class GameObject
+{
+public:
+	char pad_0568[0x60]; //740
+	char* name;
+};
 class pCamera {
 public:
 	char pad_0568[0x2E4]; //740
@@ -37,6 +69,18 @@ namespace System
 	};
 
 }
+class vp_FPCamera
+{
+public:
+	char pad_0000[0x144]; //0x0000
+	Vec2 rotation;
+};
+class WeaponSystem
+{
+public:
+	char pad_0000[0x28]; //0x0000
+	vp_FPCamera* camera;
+};
 class BotEquipment {
 public:
 	char pad_0000[8]; //0x0000
@@ -45,17 +89,28 @@ public:
 	__int64 GameObject_m_top; //0x78
 	__int64 GameObject_m_face;
 };
+class AnimatorList
+{
+public:
+	char pad_0000[0x18]; //0x0000
+	int Count;
+	__int64 Animator[];
+};
 class BotPoser {
 public:
-	char pad_0000[0x98]; //0x0000
-	bool isProtected;
+	char pad_0000[0x68]; //0x0000
+	AnimatorList* AnimatorList; //0x0068
+	char pad_0070[8]; //0x0070
+	__int64 anim; //0x0078
+	char pad_0080[24]; //0x0080
+	bool isProtected; //0x98
 };
 class RemotePlayerData
 {
 public:
 	char pad_0000[8]; //0x0000
-	__int8 myshitforvischeck;
-	char pad_0008[7]; //0x0000
+	bool isVisible;
+	char pad_0001[7]; //0x0000
 	int Item; //0x0010
 	char pad_0014[4]; //0x0014
 	Vec3 position; //0x0018

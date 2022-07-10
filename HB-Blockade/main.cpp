@@ -70,6 +70,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		
 		Wallhack::Draw();
 		misc::Promote();
+		Aimbot::DefoltAimbot();
 
 	if (GetAsyncKeyState(VK_INSERT) & 1)
 		show = !show;
@@ -80,6 +81,8 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 	ImGui::Begin("Japrajah#5252-Scub#2603-Blockade");
 	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
+	ImGui::Checkbox("Magic Aimbot" ,&misc::MagicAimbot);
+	ImGui::Checkbox("Aimbot" ,&misc::Aimbot);
 	ImGui::Checkbox("ForceNetworkPos" ,&Wallhack::testoverload);
 	ImGui::Checkbox("No_reload" ,&misc::auto_reload);
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
@@ -88,7 +91,13 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Granade Teleport", &misc::GranadeTeleport);
 	ImGui::Checkbox("Promote", &misc::active_spam);
 	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);
+	ImGui::Checkbox("RainbowEsp", &misc::rainbowesp);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
+	if (misc::rainbowesp)
+	{
+		ImGui::Text("Wave speed: "); ImGui::SameLine();
+		ImGui::SliderInt("##WAVE", &Wallhack::wave_speed, 0, 10, "%d");
+	}
 
 
 
@@ -118,9 +127,9 @@ void hk_init()
 	if (!GetModuleHandleA("GameOverlayRenderer64.dll"))
 		exit(0);
 
-	/*AllocConsole();
+	AllocConsole();
 	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);*/
+	freopen_s(&f, "CONOUT$", "w", stdout);
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)

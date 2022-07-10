@@ -21,8 +21,6 @@ void misc::Promote()
 	}
 		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <-");
 }
-
-
 void __fastcall misc::hk_sendattack(__int64 client, char a2, unsigned int a3, unsigned int a4, char a5, char hitboxid, int alter_damage, int ax, int  ay, int az, int vx, int vy, int vz, int x1, int y1, int z1, int x2, int y2, int z2) {
 	if (misc::force_headshot)
 		a5 = 1;
@@ -39,12 +37,12 @@ bool __fastcall misc::hk_ABTest_IsActive() {
 	return 0;
 }
 void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* a3) {
+	
 	if (1 > 9)
 	{
 	outhk:
 		return o_Fire(vp_FPWeaponShooter, a2, a3);
 	}
-	if (!autoshoot) goto outhk;
 	Camera* camrt = Engine::GetCameraMain();
 	if (camrt == nullptr)
 		goto outhk;
@@ -90,8 +88,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 
 		if (localpos->y == -1000) continue;
 		Vec3 localposs = { localpos->x, 1.65f + localpos->y ,localpos->z };
-
-		if (Engine::Worldtoscreen(camrt, entitybody, &scrPos))
+		if (Engine::WorldtoscreenTestWh(camrt,  &scrPos, entitybody))
 		{
 			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
 			float y = scrPos.y - (float)Global_vars::ScreenH / 2;
@@ -101,30 +98,45 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 				RaycastHit hit;
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
+					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
 					float cmpPosx = hit.m_Point.x - entitybody.x;
 					float cmpPosy = hit.m_Point.y - entitybody.y;
 					float cmpPoz = hit.m_Point.z - entitybody.z;
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
 						botsacke->myshitforvischeck = 1;
+						player->isVisible = 1;
+					}
+					else
+					{
+						player->isVisible = 0;
+						botsacke->myshitforvischeck = 0;
 					}
 				}
 
 				entitybody = { entitypos->x, 1.f + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
+					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
 					float cmpPosx = hit.m_Point.x - entitybody.x;
 					float cmpPosy = hit.m_Point.y - entitybody.y;
 					float cmpPoz = hit.m_Point.z - entitybody.z;
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
 						botsacke->myshitforvischeck = 1;
+						player->isVisible = 1;
+					}
+					else
+					{
+						player->isVisible = 0;
+						botsacke->myshitforvischeck = 0;
 					}
 				}
 
 				entitybody = { entitypos->x,0.5f + entitypos->y  ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
+				//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
 					float cmpPosx = hit.m_Point.x - entitybody.x;
 					float cmpPosy = hit.m_Point.y - entitybody.y;
 					//48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 41 8B F1 41 8B E8 0F B6 DA 
@@ -132,12 +144,19 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
 					{
 						botsacke->myshitforvischeck = 1;
+						player->isVisible = 1;
+					}
+					else
+					{
+						player->isVisible = 0;
+						botsacke->myshitforvischeck = 0;
 					}
 				}
+				if (!autoshoot) goto outhk;
 				if (botsacke->myshitforvischeck)
 				{
 					Engine::Fire(vp_FPWeaponShooter);
-					botsacke->myshitforvischeck = 0;
+					
 				}
 
 			}
@@ -146,7 +165,6 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 
 	goto outhk;
 }
-
 void __fastcall misc::hk_detonatyeev(__int64* client, int uid, Vec3 pos) {
 	if(!GranadeTeleport) return misc::o_send_detenoteevent(client, uid, pos);
 	RemotePlayersController* PlController = Engine::GetRemotePlayersController();
@@ -176,8 +194,6 @@ void __fastcall misc::hk_detonatyeev(__int64* client, int uid, Vec3 pos) {
 	}
 	return misc::o_send_detenoteevent(client, uid, pos);
 }
-
-
 void misc::hk_adddeathmessage(__int64 a1, __int64 attackerid, __int64 victimid, int weaponid, int hitbox) {
 
 	misc::o_Addmessage(a1, attackerid, victimid, weaponid, hitbox);
@@ -210,7 +226,8 @@ void misc::hk_reload(__int64 vp_FPWeaponReloader) {
 	return misc::o_reload(vp_FPWeaponReloader);
 
 
-}void misc::hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS) 
+}
+void misc::hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS) 
 {
 	//	static void hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS);
 	if (misc::auto_reload)

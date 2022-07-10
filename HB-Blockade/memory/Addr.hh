@@ -12,6 +12,7 @@ class Addr
 public:
 	static inline  auto Il2cppResloveCall = reinterpret_cast<__int64(__fastcall*)(const char*)>(GetProcAddress(GetModuleHandleA("GameAssembly.dll"), "il2cpp_resolve_icall"));
 	static inline __int64 RemotePlayersController = Utils::refSigscan("7C ? 48 8B ? ? ? ? ? 48 8B ? ? ? ? ? 48 8B ? 48 85 ? 74 ? 83 B9 E0 00 00 00", "GameAssembly.dll",2);
+	static inline __int64 WeaponSystemBase = Utils::GetAbsoluteAddress(Utils::sigscan("48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 8B 01 48 85 C0 0F 84 ? ? ? ? 8B 80 ? ? ? ? 39 82 ? ? ? ? 0F 85 ? ? ? ? 48 8B 05", "GameAssembly.dll"),3,7);
 	//static inline __int64 RemotePlayersController = Utils::refSigscan("48 8B ? ? ? ? ? 48 8B ? ? ? ? ? 4C 8B ? 0F 1F", "GameAssembly.dll");
 
 	//static inline __int64 callScreenPointToRay = Utils::sigscan("E8 ? ? ? ? 0F 10 ? 0F 11 ? ? F2 0F ? ? ? F2 0F ? ? ? 41 81 FE", "GameAssembly.dll");
@@ -43,15 +44,26 @@ public:
 	static inline __int64 AddMessageChat = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 80 7B 21 00 0F 29 74 24", "GameAssembly.dll"),1,5);
 	static inline __int64 send_createent = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 8B 97 ? ? ? ? FF CA", "GameAssembly.dll"),1,5);
 	static inline __int64 send_detonateent = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 48 8B 47 50 48 85 C0 0F 84 ? ? ? ? 8B 40 18", "GameAssembly.dll"),1,5);
+	static inline __int64 GetBoneTransform = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 48 8B 33 48 8B E8", "GameAssembly.dll"),1,5);
+	static inline __int64 AppDomain_getCurDomain = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 48 8D 4B 08 48 85 C0", "GameAssembly.dll"),1,5);
+	static inline __int64 ComponentGetTransform = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? F2 0F 10 77", "GameAssembly.dll"),1,5);
+	static inline __int64 Component_1_GetComponent = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 49 8B 4E 38 48 8B D8 48 8B 71 08", "GameAssembly.dll"),1,5);
+	static inline __int64 GetBoneTransforminternal = Utils::sigscan("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 8B D9 8B EA 48 8B 49 30 ", "UnityPlayer.dll");
 	static inline __int64 TryFire = Utils::sigscan("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 48 8B F9 75 5B ", "GameAssembly.dll");
 	static inline __int64 UpdateFire = Utils::sigscan("48 89 5C 24 ? 57 48 83 EC 50 80 3D ? ? ? ? ? 48 8B F9 75 67", "GameAssembly.dll");
 	static inline __int64 ABTest_IsActive = Utils::sigscan("48 89 5C 24 ? 57 48 83 EC 70 80 3D ? ? ? ? ? 75 2B", "GameAssembly.dll");
+	static inline __int64 GameController_Update = Utils::sigscan("40 53 48 83 EC 30 80 3D ? ? ? ? ? 48 8B D9 0F 29 74 24 ? 0F 85", "GameAssembly.dll");
+	static inline __int64 AppDomain_GetAssemblies = Utils::sigscan("48 89 5C 24 ? 48 89 6C 24 ? 41 56 48 83 EC 20 E8", "GameAssembly.dll");
+	static inline __int64 Assembly_GetType = Utils::sigscan("48 83 EC 38 48 8B 01 45 33 C9 4C 8B 90 ? ? ? ? 48 8B 80 ? ? ? ? 48 89 44 24 ? 41 FF D2 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 33 C9", "GameAssembly.dll");
 
 	static inline __int64 weapon_raycast_call_unity_raycast = Utils::sigscan("48 8D ? ? E8 ? ? ? ? 84 C0 0F 84 ? ? ? ? 45 33 ? 48 8D ? ? 48 8D ? ? E8", "GameAssembly.dll")+4;
 	static inline   __int64 getcamera = Addr::Il2cppResloveCall("UnityEngine.Camera::get_main");/*
 	static inline   __int64 ScreenPointToRay = Addr::Il2cppResloveCall("UnityEngine.Camera::ScreenPointToRay");*/
 	static inline   __int64 WorldToScreenPoint = Addr::Il2cppResloveCall("UnityEngine.Camera::WorldToScreenPoint_Injected");
 	static inline   __int64 ApplicationQuit = Addr::Il2cppResloveCall("UnityEngine.Application::Quit(System.Int32)");
+	static inline   __int64 TransformGetPos = Addr::Il2cppResloveCall("UnityEngine.Transform::get_position_Injected(UnityEngine.Vector3&)");
+	static inline   __int64 GameObjectFind = Addr::Il2cppResloveCall("UnityEngine.GameObject::Find(System.String)");
+	static inline   __int64 TransformFind = Addr::Il2cppResloveCall("UnityEngine.Transform::FindRelativeTransformWithPath");
 	
 	/*RemotePlayersController
 		"48 8B ? ? ? ? ? 0F 57 ? 0F 11 ? ? ? 48 8B ? ? ? ? ? 48 8B"
