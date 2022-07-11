@@ -81,6 +81,8 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 		auto player = plArray->Item[i];
 		if (!player) continue;
 
+		player->isVisible = 0;
+
 		if (!player->Active || player->Dead) continue;
 		if (!player->botPoser)
 			continue;
@@ -116,6 +118,8 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 		if (!playeranim) continue;
 		auto playeraniminternal = *(__int64*)(playeranim + 0x10);
 		if (!playeraniminternal) continue;
+
+		
 		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 		{
 			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
@@ -145,6 +149,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 						}
 					}
 				
+					if(player->isVisible )goto dofiregay;
 				}
 				entitybody = { entitypos->x, 1.65f + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
@@ -167,7 +172,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 							botsacke->myshitforvischeck = 0;
 						}
 					}
-			
+					if (player->isVisible)goto dofiregay;
 				}
 	
 			
@@ -192,7 +197,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 							botsacke->myshitforvischeck = 0;
 						}
 					}
-				
+					if (player->isVisible)goto dofiregay;
 				}
 
 				entitybody = { entitypos->x,0.5f * misc::bigscale + entitypos->y  ,entitypos->z };
@@ -216,7 +221,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 							botsacke->myshitforvischeck = 0;
 						}
 					}
-				
+					if (player->isVisible)goto dofiregay;
 				}
 				entitybody = { entitypos->x, 1.f + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
@@ -239,7 +244,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 							botsacke->myshitforvischeck = 0;
 						}
 					}
-				
+					if (player->isVisible)goto dofiregay;
 				}
 
 				entitybody = { entitypos->x,0.5f + entitypos->y  ,entitypos->z };
@@ -263,12 +268,18 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 							botsacke->myshitforvischeck = 0;
 						}
 					}
-				
+					if (player->isVisible) goto dofiregay;
 				}
 
 
+			dofiregay:
 				if (player->isVisible)
 				{
+					if (player->botPoser->isProtected)
+					{
+						player->isVisible = 0;
+						continue;
+					};
 					if (misc::Aimbot)
 					{
 						entitybody = { entitypos->x, 1.65f * misc::bigscale + entitypos->y ,entitypos->z };
@@ -283,12 +294,8 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					}
 					Engine::Fire(vp_FPWeaponShooter);
 				}
-
-
 			}
 		}
-
-
 	}
 	
 

@@ -92,7 +92,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Promote", &misc::active_spam);
 	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);
 	ImGui::Checkbox("RainbowEsp", &misc::rainbowesp);
-	ImGui::Checkbox("CreatePlayer", &misc::createplayer);
+	//ImGui::Checkbox("CreatePlayer", &misc::createplayer);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 	ImGui::SliderFloat("Big" ,&misc::bigscale,1,5);
 	if (misc::rainbowesp)
@@ -129,9 +129,9 @@ void hk_init()
 	if (!GetModuleHandleA("GameOverlayRenderer64.dll"))
 		exit(0);
 
-	AllocConsole();
-	FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);
+	//AllocConsole();
+	//FILE* f;
+	//freopen_s(&f, "CONOUT$", "w", stdout);
 
 	uintptr_t Steam_DXGI_PresentScene = Utils::sigscan("48 89 6C 24 18 48 89 74 24 20 41 56 48 83 EC 20 41 8B E8", "GameOverlayRenderer64.dll");
 	if (Steam_DXGI_PresentScene)
