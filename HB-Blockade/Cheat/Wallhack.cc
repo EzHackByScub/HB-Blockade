@@ -120,7 +120,17 @@ void Wallhack::Draw()
 
 		}		
 		else if (botposer->isProtected)
-			ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 0,0,255,255 }, 2, 15, 2);		
+		{
+			if (misc::rainbowesp)
+			{
+				ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 255,255,255,255 }, 2, 15, 2);
+			}
+			else
+			{
+				ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 0,0,255,255 }, 2, 15, 2);
+			}
+
+		}	
 
 	
 		/*auto AppDomian = Engine::AppDomain_getCurDomain();

@@ -156,11 +156,6 @@ bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 	const auto line_cast = reinterpret_cast<bool(*)(Vec3* Startpos, Vec3* endpos, RaycastHit * hitinfo)>(Addr::Linecast);
 	return line_cast(&Startpos, &endpos, hitinfo);
 }	
-__int64 Engine::ComponentGetTransform(__int64 Component)
-{
-	const auto line_cast = reinterpret_cast<__int64(*)(__int64 Component)>(Addr::ComponentGetTransform);
-	return line_cast(Component);
-}
 __int64 Engine::GetBoneTransforminternal(__int64 Animatorinternal, __int8 boneid)
 {
 	const auto line_cast = reinterpret_cast<__int64(*)(__int64 Animatorinternal, __int8 boneid)>(Addr::GetBoneTransforminternal);
@@ -180,21 +175,6 @@ __int64* Engine::Assembly_GetType(__int64* Assembly, System::String* name, bool 
 {
 	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Assembly, System::String * name, bool throwOnError)>(Addr::Assembly_GetType);
 	return line_cast(Assembly, name, throwOnError);
-}
-void Engine::CreatePlayer(RemotePlayersController* playercontroller, int playerindex)
-{
-	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * playercontroller, int playerindex)>(Addr::CreatePlayer);
-	return line_cast(playercontroller, playerindex);
-}
-void Engine::RestorePlayer(RemotePlayersController* playercontroller, int playerindex)
-{
-	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * playercontroller, int playerindex)>(Addr::RestorePlayer);
-	return line_cast(playercontroller, playerindex);
-}
-void Engine::SetCurrentWeapon(RemotePlayersController* playercontroller, int playerindex, int weaponid)
-{
-	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * playercontroller, int playerindex, int weaponid)>(Addr::SetCurrentWeapon);
-	return line_cast(playercontroller, playerindex,weaponid);
 }
 void Engine::transform_set_local_scale(__int64 Transform,Vec3* scale)
 {
@@ -255,11 +235,6 @@ __int64* Engine::Component_1_GetComponent(__int64* Component, __int64* Type)
 {
 	const auto line_cast = reinterpret_cast<__int64*(*)(__int64* Component, __int64* Type)>(Addr::Component_1_GetComponent);
 	return line_cast(Component, Type);
-}
-void Engine::TransformGetPosition(__int64* Transform, Vec3* vector_out)
-{
-	const auto GetCam = reinterpret_cast <void(*)(__int64* Transform, Vec3 * vector_out)>(Addr::TransformGetPos);
-	return GetCam(Transform, vector_out);
 }
 __int64* Engine::GameObjectFind(System::String* name)
 {

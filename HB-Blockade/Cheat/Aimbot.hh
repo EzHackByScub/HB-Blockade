@@ -6,8 +6,6 @@ typedef bool(__stdcall* PhysicsRaycast)(Ray a1, RaycastHit* hitinfo, float a3, i
 class Aimbot
 {
 public:
-	//static __int64 SpoofTest(__int64 a1, __int64 a2, unsigned __int64* a3);
-//	static inline ScreenToRay oScreenToRayadr;
 	static inline PhysicsRaycast oRaycast;
 	static bool  Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float a3, int a4);
 	

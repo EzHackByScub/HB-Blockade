@@ -375,7 +375,7 @@ void misc::hk_FireSpecEffects(__int64* vp_FPWeaponShooter)
 		if (!weaponsystem) return misc::o_FireSpecEffects(vp_FPWeaponShooter);
 		if (weaponsystem)
 		{
-			int mwid = *(int*)(weaponsystem + 0x94); // mwid
+			int mwid = *(int*)(weaponsystem + 0x94); // mwid // crash in weaponsys
 			int currentwid = *(int*)((__int64)weaponsystem + 0x120);
 			if (mwid != currentwid)
 			{
@@ -409,7 +409,7 @@ void misc::hk_FireSpecEffects(__int64* vp_FPWeaponShooter)
 		//	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* WS, int wid, float)>(Addr::OnWeaponReloadend);
 	}
 	return misc::o_FireSpecEffects(vp_FPWeaponShooter);
-}
+} 
 __int64 misc::hk_ColiderFinder(__int64 a1, __int64 a2)
 {
 	auto v4 = *(__int64*)( * (__int64*)(*(__int64*)(a1 + 0x8)) + 0x10);
