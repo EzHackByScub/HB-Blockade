@@ -107,7 +107,9 @@ public:
 };
 class BotPoser {
 public:
-	char pad_0000[0x98]; //0x0000	
+	char pad_0000[0x78]; //0x0000
+	__int64 anim; //0x0078
+	char pad_0080[24]; //0x0080
 	bool isProtected; //0x98
 };
 class RemotePlayerData

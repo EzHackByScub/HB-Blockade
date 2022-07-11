@@ -110,6 +110,8 @@ Vec3*  Engine::GameObject_GetPosition(__int64 Gameobject)
 }
 bool Engine::WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position)  // string to find in IDA    UnityEngine.Camera::get_main() __int64 Camerauncashed, Vector3 inScreenPos, float* positionTarget, unsigned __int8 eye, BYTE* a5
 {
+	auto camecashe = came->m_cashedptr;
+	if (!camecashe) return false;
 	Vec3 tvec{ came->m_cashedptr->matrix._14, came->m_cashedptr->matrix._24, came->m_cashedptr->matrix._34 };
 	Vec3 rvec{ came->m_cashedptr->matrix._11, came->m_cashedptr->matrix._21, came->m_cashedptr->matrix._31 };
 	Vec3 upvec{ came->m_cashedptr->matrix._12, came->m_cashedptr->matrix._22, came->m_cashedptr->matrix._32 };
@@ -123,7 +125,31 @@ bool Engine::WorldtoscreenTestWh(Camera* came, Vec3* wtsvec, Vec3 position)  // 
 	return true;
 }
 
+Vec2 ReturnAngle(Vec2 angle)
+{
+	if (angle.x + 360 > 360)
+		return { angle.x,angle.y + 90 };
+	return { angle.x + 360,angle.y + 90 };
+}
+Vec2 Engine::CalcAngle(Vec3 startPOS, Vec3 endPOS)
+{
+	float deltaX = endPOS.x - startPOS.x;
+	float deltaY = endPOS.y - startPOS.y;
+	float deltaZ = endPOS.z - startPOS.z;
+	float dist = sqrt(pow((endPOS.x - startPOS.x), 2.0) + pow((endPOS.y - startPOS.y), 2.0) + pow((endPOS.z - startPOS.z), 2.0));
 
+	if (dist < 0)
+	{
+		dist = dist * -1;
+	}
+
+	float xzlength = sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
+	float angleX = atan2(deltaY, xzlength) * (-57.2957795);
+	float angleY = atan2(deltaX, deltaZ) * (57.2957795);
+	Vec2 angle = { angleY,angleX };
+	//Vec2 angleRet = ReturnAngle(angle);
+	return  angle;
+}
 
 bool Engine::LineCast(Vec3 Startpos, Vec3 endpos, RaycastHit* hitinfo)
 {

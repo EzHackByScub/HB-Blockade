@@ -91,6 +91,14 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 		auto botsacke = player->botEquipment;
 		if (!botsacke) continue;
 
+		auto go = BotsGO->Gameobject[i];
+		if (!go) continue;
+		auto internaltransform = Engine::GO_Get_InternalTransform(go);
+		if (!internaltransform) continue;
+		auto trnasform = *(__int64*)(internaltransform + 0x28);
+		Vec3 scale = { misc::bigscale,misc::bigscale,misc::bigscale };
+		Engine::transform_set_local_scale(trnasform, &scale);
+
 		Vec3 scrPos;
 		Vec3* entitypos = Engine::GameObject_GetPosition(BotsGO->Gameobject[i]);
 
@@ -101,6 +109,13 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 
 		if (localpos->y == -1000) continue;
 		Vec3 localposs = { localpos->x, 1.65f  + localpos->y ,localpos->z };
+
+
+		
+		auto playeranim = player->botPoser->anim;
+		if (!playeranim) continue;
+		auto playeraniminternal = *(__int64*)(playeranim + 0x10);
+		if (!playeraniminternal) continue;
 		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 		{
 			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
@@ -111,121 +126,161 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 				RaycastHit hit;
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
-					float cmpPosx = hit.m_Point.x - entitybody.x;
-					float cmpPosy = hit.m_Point.y - entitybody.y;
-					float cmpPoz = hit.m_Point.z - entitybody.z;
-					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					for (int d = 0; d < 17; d++)
 					{
-						botsacke->myshitforvischeck = 1;
-						player->isVisible = 1;
+						if (!playeraniminternal) break;
+						auto bonetransf = Engine::GetBoneTransforminternal(playeraniminternal, d);
+						if (!bonetransf)continue;
+						auto indexs = *(int*)(bonetransf + 0x8);
+						if (hit.m_Collider + 2 == indexs)
+						{
+							botsacke->myshitforvischeck = 1;
+							player->isVisible = 1;
+							break;
+						}
+						else
+						{
+							player->isVisible = 0;
+							botsacke->myshitforvischeck = 0;
+						}
 					}
-					else
-					{
-						player->isVisible = 0;
-						botsacke->myshitforvischeck = 0;
-					}
+				
 				}
 				entitybody = { entitypos->x, 1.65f + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
-					float cmpPosx = hit.m_Point.x - entitybody.x;
-					float cmpPosy = hit.m_Point.y - entitybody.y;
-					float cmpPoz = hit.m_Point.z - entitybody.z;
-					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					for (int d = 0; d < 17; d++)
 					{
-						botsacke->myshitforvischeck = 1;
-						player->isVisible = 1;
+						if (!playeraniminternal) break;
+						auto bonetransf = Engine::GetBoneTransforminternal(playeraniminternal, d);
+						if (!bonetransf)continue;
+						auto indexs = *(int*)(bonetransf + 0x8);
+						if (hit.m_Collider + 2 == indexs)
+						{
+							botsacke->myshitforvischeck = 1;
+							player->isVisible = 1;
+							break;
+						}
+						else
+						{
+							player->isVisible = 0;
+							botsacke->myshitforvischeck = 0;
+						}
 					}
-					else
-					{
-						player->isVisible = 0;
-						botsacke->myshitforvischeck = 0;
-					}
+			
 				}
 	
 			
 				entitybody = { entitypos->x, 1.f * misc::bigscale + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
-					float cmpPosx = hit.m_Point.x - entitybody.x;
-					float cmpPosy = hit.m_Point.y - entitybody.y;
-					float cmpPoz = hit.m_Point.z - entitybody.z;
-					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					for (int d = 0; d < 17; d++)
 					{
-						botsacke->myshitforvischeck = 1;
-						player->isVisible = 1;
+						if (!playeraniminternal) break;
+						auto bonetransf = Engine::GetBoneTransforminternal(playeraniminternal, d);
+						if (!bonetransf)continue;
+						auto indexs = *(int*)(bonetransf + 0x8);
+						if (hit.m_Collider + 2 == indexs)
+						{
+							botsacke->myshitforvischeck = 1;
+							player->isVisible = 1;
+							break;
+						}
+						else
+						{
+							player->isVisible = 0;
+							botsacke->myshitforvischeck = 0;
+						}
 					}
-					else
-					{
-						player->isVisible = 0;
-						botsacke->myshitforvischeck = 0;
-					}
+				
 				}
 
 				entitybody = { entitypos->x,0.5f * misc::bigscale + entitypos->y  ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
-					float cmpPosx = hit.m_Point.x - entitybody.x;
-					float cmpPosy = hit.m_Point.y - entitybody.y;
-					//48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 41 8B F1 41 8B E8 0F B6 DA 
-					float cmpPoz = hit.m_Point.z - entitybody.z;
-					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					for (int d = 0; d < 17; d++)
 					{
-						botsacke->myshitforvischeck = 1;
-						player->isVisible = 1;
+						if (!playeraniminternal) break;
+						auto bonetransf = Engine::GetBoneTransforminternal(playeraniminternal, d);
+						if (!bonetransf)continue;
+						auto indexs = *(int*)(bonetransf + 0x8);
+						if (hit.m_Collider + 2 == indexs)
+						{
+							botsacke->myshitforvischeck = 1;
+							player->isVisible = 1;
+							break;
+						}
+						else
+						{
+							player->isVisible = 0;
+							botsacke->myshitforvischeck = 0;
+						}
 					}
-					else
-					{
-						player->isVisible = 0;
-						botsacke->myshitforvischeck = 0;
-					}
+				
 				}
 				entitybody = { entitypos->x, 1.f + entitypos->y ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
-					float cmpPosx = hit.m_Point.x - entitybody.x;
-					float cmpPosy = hit.m_Point.y - entitybody.y;
-					float cmpPoz = hit.m_Point.z - entitybody.z;
-					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					for (int d = 0; d < 17; d++)
 					{
-						botsacke->myshitforvischeck = 1;
-						player->isVisible = 1;
+						if (!playeraniminternal) break;
+						auto bonetransf = Engine::GetBoneTransforminternal(playeraniminternal, d);
+						if (!bonetransf)continue;
+						auto indexs = *(int*)(bonetransf + 0x8);
+						if (hit.m_Collider + 2 == indexs)
+						{
+							botsacke->myshitforvischeck = 1;
+							player->isVisible = 1;
+							break;
+						}
+						else
+						{
+							player->isVisible = 0;
+							botsacke->myshitforvischeck = 0;
+						}
 					}
-					else
-					{
-						player->isVisible = 0;
-						botsacke->myshitforvischeck = 0;
-					}
+				
 				}
 
 				entitybody = { entitypos->x,0.5f + entitypos->y  ,entitypos->z };
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
-					//if (hit.m_Distance > 82) continue; distance check nead weapon max distance
-					float cmpPosx = hit.m_Point.x - entitybody.x;
-					float cmpPosy = hit.m_Point.y - entitybody.y;
-					//48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 41 8B F1 41 8B E8 0F B6 DA 
-					float cmpPoz = hit.m_Point.z - entitybody.z;
-					if (cmpPosx > -0.5f && cmpPosx < 0.5f && cmpPosy > -0.5f && cmpPosy < 0.5f && cmpPoz > -0.5f && cmpPoz < 0.5f) // to do get tag from hit and compare it 
+					for (int d = 0; d < 17; d++)
 					{
-						botsacke->myshitforvischeck = 1;
-						player->isVisible = 1;
+						if (!playeraniminternal) break;
+						auto bonetransf = Engine::GetBoneTransforminternal(playeraniminternal, d);
+						if (!bonetransf)continue;
+						auto indexs = *(int*)(bonetransf + 0x8);
+						if (hit.m_Collider + 2 == indexs)
+						{							
+							botsacke->myshitforvischeck = 1;
+							player->isVisible = 1;
+							break;
+						}
+						else
+						{
+							player->isVisible = 0;
+							botsacke->myshitforvischeck = 0;
+						}
 					}
-					else
-					{
-						player->isVisible = 0;
-						botsacke->myshitforvischeck = 0;
-					}
+				
 				}
 
 
 				if (player->isVisible)
 				{
+					if (misc::Aimbot)
+					{
+						entitybody = { entitypos->x, 1.65f * misc::bigscale + entitypos->y ,entitypos->z };
+						auto weaponsystem = Engine::GetWeaponSystem();
+						if (!weaponsystem) return misc::o_FireSpecEffects(vp_FPWeaponShooter);
+						Vec2 angle = Engine::CalcAngle(localposs, entitybody);
+						auto weaponcamera = weaponsystem->camera;
+						if (!weaponcamera) continue;
+						weaponcamera->rotation.x = angle.y;
+						weaponcamera->rotation.y = angle.x;
+
+					}
 					Engine::Fire(vp_FPWeaponShooter);
 				}
 
@@ -348,47 +403,10 @@ void misc::hk_FireSpecEffects(__int64* vp_FPWeaponShooter)
 	}
 	return misc::o_FireSpecEffects(vp_FPWeaponShooter);
 }
-void misc::hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS) 
+__int64 misc::hk_ColiderFinder(__int64 a1, __int64 a2)
 {
-	//	static void hk_weapon_raycast(__int64 WeaponSystem, unsigned int wid, float* dist, unsigned int blockdist, __int64 WS);
-	if (misc::auto_reload)
-	{
-	
-		if (WeaponSystem)
-		{
-
-		int mwid = *(int*)(WeaponSystem + 0x94); // mwid
-		if (mwid != wid)
-		{
-			Engine::send_prereload(wid);
-			Engine::send_reload(wid);
-		int pwid = *(int*)(WeaponSystem + 0x98);
-		int swid = *(int*)(WeaponSystem + 0x9c);
-
-		int currentwid = *(int*)(WeaponSystem + 0x120);
-		if (pwid == wid)
-		{
-			if (*(int*)(WeaponSystem + 0xC8) >0)
-			{
-			*(int*)(WeaponSystem + 0xC0) += 1; // clip
-			*(int*)(WeaponSystem + 0xC8) -= 1; //backpack	
-			}
-		}
-		else if (swid == wid)
-		{
-			if (*(int*)(WeaponSystem + 0xD4) > 0)
-			{
-				*(int*)(WeaponSystem + 0xCC) += 1;
-				*(int*)(WeaponSystem + 0xD4) -= 1;
-			}
-		}
-
-
-		}
-		}
-	//	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* WS, int wid, float)>(Addr::OnWeaponReloadend);
-
-	}
-
-	return misc::o_weapon_raycast(WeaponSystem, wid, dist, blockdist, WS);
+	auto v4 = *(__int64*)( * (__int64*)(*(__int64*)(a1 + 0x8)) + 0x10);
+	auto Colider = *(__int64*)(v4 + 0x8);
+	std::cout << Colider << std::endl;
+	return misc::o_ColiderFinder(a1,a2);
 }

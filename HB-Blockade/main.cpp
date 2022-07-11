@@ -82,6 +82,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Begin("Japrajah#5252-Scub#2603-Blockade");
 	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
 	ImGui::Checkbox("Magic Aimbot" ,&misc::MagicAimbot);
+	ImGui::Checkbox("Aimbot" ,&misc::Aimbot);
 	ImGui::Checkbox("ForceNetworkPos" ,&Wallhack::testoverload);
 	ImGui::Checkbox("No_reload" ,&misc::auto_reload);
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
@@ -145,6 +146,7 @@ void hk_init()
 	MH_CreateHook((void*)Addr::send_detonateent, &misc::hk_detonatyeev, reinterpret_cast<void**>(&misc::o_send_detenoteevent));
 	MH_CreateHook((void*)Addr::ABTest_IsActive, &misc::hk_ABTest_IsActive, reinterpret_cast<void**>(&misc::o_ABTest_IsActive));
 	MH_CreateHook((void*)Addr::UpdateFire, &misc::hk_fire, reinterpret_cast<void**>(&misc::o_Fire));
+	//MH_CreateHook((void*)Addr::ColiderFinder, &misc::hk_ColiderFinder, reinterpret_cast<void**>(&misc::o_ColiderFinder));
 	MH_EnableHook(MH_ALL_HOOKS);
 	return;
 }
@@ -156,7 +158,6 @@ void hk_init()
 
 BOOL __fastcall DllMain(HMODULE hm, DWORD  r, LPVOID lpR)
 {
-
 	if (r == 1)
 		hk_init();
 

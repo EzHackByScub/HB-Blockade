@@ -96,13 +96,7 @@ void Wallhack::Draw()
 		if (!Engine::WorldtoscreenTestWh(camrt, &scrposeye, entytyfix)) continue;
 		if (!Engine::WorldtoscreenTestWh(camrt, &scrposfood, *entitypos)) continue;
 
-		auto go = BotsGO->Gameobject[i];
-		if (!go) continue;
-		auto internaltransform = Engine::GO_Get_InternalTransform(go);
-		if (!internaltransform) continue;
-		auto trnasform = *(__int64*)(internaltransform + 0x28);
-		Vec3 scale = { misc::bigscale,misc::bigscale,misc::bigscale };
-		Engine::transform_set_local_scale(trnasform, &scale);
+		
 
 		float width = (scrposeye.y - scrposfood.y) * 0.3f;
 
@@ -127,6 +121,42 @@ void Wallhack::Draw()
 		}		
 		else if (botposer->isProtected)
 			ImGui::GetOverlayDrawList()->AddRect({ scrposeye.x - width,scrposeye.y }, { scrposfood.x + width,scrposfood.y }, ImColor{ 0,0,255,255 }, 2, 15, 2);		
+
+	
+		/*auto AppDomian = Engine::AppDomain_getCurDomain();
+		if (!AppDomian) continue;
+		auto Assemblies = Engine::AppDomain_GetAssemblies(AppDomian, false);
+		__int64* ColliderType = 0;
+		for (int d = 0; d < 31; d++)
+		{
+			__int64* assembly = Assemblies.Assembly[d];
+			if (!assembly) continue;
+
+			const wchar_t* typenameda = L"UnityEngine.BoxCollider";
+			System::String name{};
+			name.Length = wcslen(typenameda);
+			if (name.Length >= 256)
+				continue;
+			memcpy((void*)&name.Value, typenameda, static_cast<size_t>(name.Length) * 2);
+			if (name.Length < 0)
+				continue;
+
+			ColliderType = Engine::Assembly_GetType(assembly, &name, false);
+			if (ColliderType)
+				break;
+		}
+		if (!ColliderType) continue;*/
+
+		/*auto go = BotsGO->Gameobject[i];
+		if (!go) continue;
+		auto transforminternal = Engine::GO_Get_InternalTransform(BotsGO->Gameobject[i]);
+		if (!transforminternal) continue;
+		auto trnasform = *(__int64*)(transforminternal + 0x28);
+		if (!trnasform) continue;
+		auto playerColider2 = Engine::Component_1_GetComponent((__int64*)go, ColliderType);
+		if (!playerColider2) continue;
+		auto playerColider= Engine::Component_1_GetComponent((__int64*)trnasform, ColliderType);
+		if (!playerColider) continue;*/
 
 	
 	}

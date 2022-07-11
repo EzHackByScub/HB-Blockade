@@ -26,6 +26,7 @@ public:
 	static __int64 GetBoneTransforminternal(__int64 Animatorinternal, __int8 boneid);
 	static __int64 ComponentGetTransform(__int64 Component);
 	static void TransformGetPosition(__int64* Transform, Vec3* vector_out);
+	static Vec2 CalcAngle(Vec3 startPOS, Vec3 endPOS);
 	static __int64  InterGO_Get_InternalTransform(__int64 Gameobject);
 	static  __int64* GameObjectFind(System::String* name);
 	static  __int64* TransformFind(__int64* transform, System::String* name, bool xz);

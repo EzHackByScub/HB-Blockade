@@ -60,6 +60,8 @@ public:
 	static inline __int64 material_get_main_texture = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 48 89 43 60 48 8B 4B 18", "GameAssembly.dll"),1,5);
 	static inline __int64 rendersettings_set_skybox = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 33 D2 48 8B CB E8 ? ? ? ? 48 8B 4B 18 4C 8B 73 28", "GameAssembly.dll"),1,5);
 	static inline __int64 ImageConversion_LoadImage = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? F3 0F 10 1D ? ? ? ? 48 8D 4C 24 ? 48 8B 7E 20", "GameAssembly.dll"),1,5);
+	static inline __int64 UpdateMovement = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 33 D2 48 8B CF E8 ? ? ? ? F3 0F 10 47 ? F3 0F 59 05", "GameAssembly.dll"),1,5);
+	static inline __int64 ColiderFinder = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 8B 46 FC", "UnityPlayer.dll"),1,5);
 	static inline __int64 GetBoneTransforminternal = Utils::sigscan("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 8B D9 8B EA 48 8B 49 30 ", "UnityPlayer.dll");
 	static inline __int64 TryFire = Utils::sigscan("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 40 80 3D ? ? ? ? ? 48 8B F9 75 5B ", "GameAssembly.dll");
 	static inline __int64 UpdateFire = Utils::sigscan("48 89 5C 24 ? 57 48 83 EC 50 80 3D ? ? ? ? ? 48 8B F9 75 67", "GameAssembly.dll");
@@ -80,7 +82,9 @@ public:
 	static inline   __int64 TransformFind = Addr::Il2cppResloveCall("UnityEngine.Transform::FindRelativeTransformWithPath");
 	static inline   __int64 Material_get_shader = Addr::Il2cppResloveCall("UnityEngine.Material::get_shader()");
 	static inline   __int64 transform_set_local_scale = Addr::Il2cppResloveCall("UnityEngine.Transform::set_localScale_Injected(UnityEngine.Vector3&)");
+	static inline   __int64 ComponentGetComponent = Addr::Il2cppResloveCall("UnityEngine.Component.GetComponent<Collider>()");
 	static inline   __int64 ComponentGetTransform = Addr::Il2cppResloveCall("UnityEngine.Component::get_transform()");
+
 	
 	/*RemotePlayersController
 		"48 8B ? ? ? ? ? 0F 57 ? 0F 11 ? ? ? 48 8B ? ? ? ? ? 48 8B"
