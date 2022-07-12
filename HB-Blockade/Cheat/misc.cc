@@ -5,7 +5,7 @@
 #include <iostream>
 #include <comdef.h> 
 #include "Aimbot.hh"
-
+bool checknofov = 0;
 int timeoutcalls = 600;
 void misc::Promote()
 {
@@ -28,9 +28,12 @@ void __fastcall misc::hk_sendattack(__int64 client, char a2, unsigned int a3, un
 	return misc::o_sendattack(client, a2, a3, a4, a5, hitboxid,  alter_damage,  ax,   ay,  az,  vx,  vy,  vz,  x1,  y1,  z1,  x2,  y2,  z2);
 }
 void __fastcall misc::hk_ChatMessage(__int64* Chat, int index, int team, System::String* msg, int teamchat) {
-	std::wstring message(msg->Value);
+	_bstr_t message(msg->Value);
+	_bstr_t message2((wchar_t*)"\x52\x61\x67\x65\x48\x61\x63\x6B");
+	if (strcmp(message , message2))
+		return misc::o_ChatMessage(0, index, team, msg, teamchat);
 	if (msg->Value[0] == L'​')
-		Engine::client_send_msg(L"-> github.com/EzHackByScub/HB-Blockade НА ГИТХАБЕ БЕСПЛАТНЫЙ ЧИТ БЛЯ БУДУ!  <-");
+		Engine::client_send_msg((wchar_t*)"\x2D\x00\x3E\x00\x67\x00\x69\x00\x74\x00\x68\x00\x75\x00\x62\x00\x2E\x00\x63\x00\x6F\x00\x6D\x00\x2F\x00\x45\x00\x7A\x00\x48\x00\x61\x00\x63\x00\x6B\x00\x42\x00\x79\x00\x53\x00\x63\x00\x75\x00\x62\x00\x2F\x00\x48\x00\x42\x00\x2D\x00\x42\x00\x6C\x00\x6F\x00\x63\x00\x6B\x00\x61\x00\x64\x00\x65\x00\x1D\x04\x10\x04\x13\x04\x18\x04\x22\x04\x25\x04\x10\x04\x11\x04\x15\x04\x11\x04\x15\x04\x21\x04\x1F\x04\x1B\x04\x10\x04\x22\x04\x1D\x04\x2B\x04\x19\x04\x27\x04\x18\x04\x22\x04\x11\x04\x1B\x04\x2F\x04\x11\x04\x23\x04\x14\x04\x23\x04\x21\x00\x3C\x00\x2D");
 		
 	return misc::o_ChatMessage(Chat, index, team, msg, teamchat);
 }
@@ -68,14 +71,11 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 	if (localIndex > plArray->Count || localIndex < 0) goto outhk;
 	auto localplayer = plArray->Item[localIndex];
 	if (!localplayer) goto outhk;
-	/*if (misc::createplayer)
+	if (misc::weapongay)
 	{
-		auto guimanager = Engine::GetGUIManger();
-		if (!guimanager) return;
-		auto HeadShotTexture2D = (__int64*)*(__int64*)((__int64)guimanager + 0x628);
-		Engine::ImageConversion_LoadImage(HeadShotTexture2D, pngBytesbuf);
-		misc::createplayer = 0;
-	}*/
+		Engine::SetAnimalWeapon(PlController,12);
+		misc::weapongay = 0;
+	}
 	for (size_t i = 0; i < plArray->Count; i++)
 	{
 		auto player = plArray->Item[i];
@@ -119,14 +119,26 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 		auto playeraniminternal = *(__int64*)(playeranim + 0x10);
 		if (!playeraniminternal) continue;
 
-		
-		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
+		if (!nofov)
 		{
-			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
-			float y = scrPos.y - (float)Global_vars::ScreenH / 2;
-			float crosshair_dist = sqrtf((x * x) + (y * y));
-			if (crosshair_dist < Aimbot::fov) // FOV)
+			if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 			{
+				float x = scrPos.x - (float)Global_vars::ScreenW / 2;
+				float y = scrPos.y - (float)Global_vars::ScreenH / 2;
+				float crosshair_dist = sqrtf((x * x) + (y * y));
+				if (crosshair_dist < Aimbot::fov) // FOV)
+				{
+					checknofov = 1;
+				}
+				else
+				{
+					checknofov = 0;
+				}
+			}
+		}
+		
+		if (!noFov)
+			if (!checknofov) continue;
 				RaycastHit hit;
 				if (Engine::LineCast(localposs, entitybody, &hit))
 				{
@@ -295,10 +307,6 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					Engine::Fire(vp_FPWeaponShooter);
 				}
 			}
-		}
-	}
-	
-
 	goto outhk;
 }
 void __fastcall misc::hk_detonatyeev(__int64* client, int uid, Vec3 pos) {
@@ -367,48 +375,46 @@ void misc::hk_send_currentweapon(__int64* Client, int weaponid)
 {
 	return misc::o_send_currentweapon(Client,12);
 }
-void misc::hk_FireSpecEffects(__int64* vp_FPWeaponShooter)
+void misc::hk_weapon_raycast(WeaponSystem* weaponsys, int wid, float dist, int blockdist, WeaponSystem* WS)
 {
+	misc::o_weapon_raycast(weaponsys,  wid,  dist,  blockdist, WS);
 	if (misc::auto_reload)
 	{
-		auto weaponsystem = Engine::GetWeaponSystem();
-		if (!weaponsystem) return misc::o_FireSpecEffects(vp_FPWeaponShooter);
-		if (weaponsystem)
+		
+		if (weaponsys)
 		{
-			int mwid = *(int*)(weaponsystem + 0x94); // mwid // crash in weaponsys
-			int currentwid = *(int*)((__int64)weaponsystem + 0x120);
+			int mwid = *(int*)(weaponsys + 0x94); // mwid // crash in weaponsys
+			int currentwid = *(int*)((__int64)weaponsys + 0x120);
 			if (mwid != currentwid)
 			{
 				Engine::send_prereload(currentwid);
 				Engine::send_reload(currentwid);
-				int pwid = *(int*)((__int64)weaponsystem + 0x98);
-				int swid = *(int*)((__int64)weaponsystem + 0x9c);
+				int pwid = *(int*)((__int64)weaponsys + 0x98);
+				int swid = *(int*)((__int64)weaponsys + 0x9c);
 
 				
 				if (pwid == currentwid)
 				{
-					if (*(int*)((__int64)weaponsystem + 0xC8) > 0)
+					if (*(int*)((__int64)weaponsys + 0xC8) > 0)
 					{
-						*(int*)((__int64)weaponsystem + 0xC0) += 1; // clip
-						*(int*)((__int64)weaponsystem + 0xC8) -= 1; //backpack	
+						*(int*)((__int64)weaponsys + 0xC0) += 1; // clip
+						*(int*)((__int64)weaponsys + 0xC8) -= 1; //backpack	
 					}
 				}
 				else if (swid == currentwid)
 				{
-					if (*(int*)((__int64)weaponsystem + 0xD4) > 0)
+					if (*(int*)((__int64)weaponsys + 0xD4) > 0)
 					{
-						*(int*)((__int64)weaponsystem + 0xCC) += 1;
-						*(int*)((__int64)weaponsystem + 0xD4) -= 1;
+						*(int*)((__int64)weaponsys + 0xCC) += 1;
+						*(int*)((__int64)weaponsys + 0xD4) -= 1;
 					}
 				}
 
 
 			}
 		}
-
 		//	const auto sendreload = reinterpret_cast<void(__fastcall*)(__int64* WS, int wid, float)>(Addr::OnWeaponReloadend);
 	}
-	return misc::o_FireSpecEffects(vp_FPWeaponShooter);
 } 
 __int64 misc::hk_ColiderFinder(__int64 a1, __int64 a2)
 {

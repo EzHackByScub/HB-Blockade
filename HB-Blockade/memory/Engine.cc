@@ -206,6 +206,11 @@ void Engine::material_set_texture(__int64* Material,__int64* Texture)
 	const auto line_cast = reinterpret_cast<void(*)(__int64* Material, __int64* Texture)>(Addr::material_set_texture);
 	return line_cast(Material, Texture);
 }
+void Engine::SetAnimalWeapon(RemotePlayersController* pc,__int8 weaponid)
+{
+	const auto line_cast = reinterpret_cast<void(*)(RemotePlayersController * pc, __int8 weaponid)>(Addr::SetAnimal);
+	return line_cast(pc, weaponid);
+}
 __int64* Engine::material_get_main_texture(__int64* Material)
 {
 	const auto line_cast = reinterpret_cast<__int64* (*)(__int64* Material)>(Addr::material_get_main_texture);

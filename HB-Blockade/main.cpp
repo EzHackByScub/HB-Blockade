@@ -66,6 +66,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGuiIO IMIO = ImGui::GetIO();
 	Global_vars::ScreenW = IMIO.DisplaySize.x;
 	Global_vars::ScreenH = IMIO.DisplaySize.y;
+	if(!misc::nofov)
 		ImGui::GetOverlayDrawList()->AddCircle({Global_vars::ScreenW / 2 ,Global_vars::ScreenH / 2},Aimbot::fov,ImColor(255,255,255,255),64,1);
 		
 		Wallhack::Draw();
@@ -83,6 +84,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("W4ll-h4ck" ,&Wallhack::enable);
 	ImGui::Checkbox("Magic Aimbot" ,&misc::MagicAimbot);
 	ImGui::Checkbox("Aimbot" ,&misc::Aimbot);
+	ImGui::Checkbox("No Fov" ,&misc::nofov);
 	ImGui::Checkbox("ForceNetworkPos" ,&Wallhack::testoverload);
 	ImGui::Checkbox("No_reload" ,&misc::auto_reload);
 	ImGui::Checkbox("Fast reload" ,&misc::fast_reload);
@@ -92,7 +94,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	ImGui::Checkbox("Promote", &misc::active_spam);
 	ImGui::Checkbox("Auto Shoot(test)", &misc::autoshoot);
 	ImGui::Checkbox("RainbowEsp", &misc::rainbowesp);
-	//ImGui::Checkbox("CreatePlayer", &misc::createplayer);
+	//ImGui::Checkbox("SetWEapon", &misc::weapongay);
 	ImGui::SliderFloat("A1m F0v" ,&Aimbot::fov,5,600);
 	ImGui::SliderFloat("Big" ,&misc::bigscale,1,5);
 	if (misc::rainbowesp)
@@ -139,7 +141,7 @@ void hk_init()
 	Utils::ReplaceCall((void*)Addr::weapon_raycast_call_unity_raycast, &Aimbot::Physics_Raycast_hk, (__int64*)&Aimbot::oRaycast);
 	MH_Initialize();
 	MH_CreateHook((void*)Addr::client_sendattack, &misc::hk_sendattack, reinterpret_cast<void**>(&misc::o_sendattack));
-	MH_CreateHook((void*)Addr::FireSpecEffects, &misc::hk_FireSpecEffects, reinterpret_cast<void**>(&misc::o_FireSpecEffects));
+	MH_CreateHook((void*)Addr::weapon_raycast, &misc::hk_weapon_raycast, reinterpret_cast<void**>(&misc::o_weapon_raycast));
 	MH_CreateHook((void*)Addr::FPweaponreloader_ongui, &misc::hk_reload, reinterpret_cast<void**>(&misc::o_reload));
 	MH_CreateHook((void*)Addr::AddDeathMsg, &misc::hk_adddeathmessage, reinterpret_cast<void**>(&misc::o_Addmessage));
 	MH_CreateHook((void*)Addr::AddMessageChat, &misc::hk_ChatMessage, reinterpret_cast<void**>(&misc::o_ChatMessage));
@@ -150,11 +152,6 @@ void hk_init()
 	MH_EnableHook(MH_ALL_HOOKS);
 	return;
 }
-
-
-
-
-
 
 BOOL __fastcall DllMain(HMODULE hm, DWORD  r, LPVOID lpR)
 {

@@ -2,6 +2,7 @@
 #include "../memory/Engine.hh"
 #include <iostream>
 #include "misc.hh"
+bool checknofovda = 0;
 bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int a4)
 {
 
@@ -54,13 +55,26 @@ bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int
 		auto playeraniminternal = *(__int64*)(playeranim + 0x10);
 		if (!playeraniminternal) continue;
 
-		if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
+		if (!misc::nofov)
 		{
-			float x = scrPos.x - (float)Global_vars::ScreenW / 2;
-			float y = scrPos.y - (float)Global_vars::ScreenH / 2;
-			float crosshair_dist = sqrtf((x * x) + (y * y));
-			if (crosshair_dist < Aimbot::fov) // FOV)
+			if (Engine::WorldtoscreenTestWh(camrt, &scrPos, entitybody))
 			{
+				float x = scrPos.x - (float)Global_vars::ScreenW / 2;
+				float y = scrPos.y - (float)Global_vars::ScreenH / 2;
+				float crosshair_dist = sqrtf((x * x) + (y * y));
+				if (crosshair_dist < Aimbot::fov) // FOV)
+				{
+					checknofovda = 1;
+				}
+				else
+				{
+					checknofovda = 0;
+				}
+			}
+		}
+
+		if (!misc::noFov)
+			if (!checknofovda) continue;
 				RaycastHit hit;
 
 				if (Engine::LineCast(a1.StartPosition, entitybody, &hit))
@@ -158,8 +172,7 @@ bool Aimbot::Physics_Raycast_hk(Ray a1, RaycastHit* hitinfo, float distance, int
 				}
 
 			}
-		}
-	}
+		
 	goto outhk;
 }
 

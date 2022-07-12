@@ -82,10 +82,16 @@ public:
 	char pad_0000[0x144]; //0x0000
 	Vec2 rotation;
 };
+class vp_FPInput
+{
+public:
+
+};
 class WeaponSystem
 {
 public:
-	char pad_0000[0x28]; //0x0000
+	char pad_0000[0x20]; //0x0000
+	vp_FPInput* vpinput;
 	vp_FPCamera* camera;
 	char pad_0030[280]; //0x0030
 	__int64* Transform; //0x0148

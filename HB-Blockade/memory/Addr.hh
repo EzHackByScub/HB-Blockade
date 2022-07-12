@@ -40,6 +40,7 @@ public:
 
 
 	static inline __int64 weapon_raycast = Utils::refSigscan("48 89 ? ? ? E8 ? ? ? ? E9 ? ? ? ? 48 8B ? ? ? ? ? 48 8B", "GameAssembly.dll",5);
+	static inline __int64 alter_weapon_raycast = Utils::refSigscan("40 55 53 56 41 56 48 8D AC 24", "GameAssembly.dll",5);
 	static inline __int64 AddDeathMsg = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 44 3B 73 18 0F 85", "GameAssembly.dll"),1,5);
 	static inline __int64 AddMessageChat = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 80 7B 21 00 0F 29 74 24", "GameAssembly.dll"),1,5);
 	static inline __int64 send_detonateent = Utils::GetAbsoluteAddress(Utils::sigscan("E8 ? ? ? ? 48 8B 47 50 48 85 C0 0F 84 ? ? ? ? 8B 40 18", "GameAssembly.dll"),1,5);
@@ -61,6 +62,7 @@ public:
 	static inline __int64 AppDomain_GetAssemblies = Utils::sigscan("48 89 5C 24 ? 48 89 6C 24 ? 41 56 48 83 EC 20 E8", "GameAssembly.dll");
 	static inline __int64 Assembly_GetType = Utils::sigscan("48 83 EC 38 48 8B 01 45 33 C9 4C 8B 90 ? ? ? ? 48 8B 80 ? ? ? ? 48 89 44 24 ? 41 FF D2 48 83 C4 38 C3 CC CC CC CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 33 C9", "GameAssembly.dll");
 	static inline __int64 FireSpecEffects = Utils::sigscan("48 89 5C 24 ? 57 48 83 EC 30 80 3D ? ? ? ? ? 48 8B D9 75 37 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? C6 05 ? ? ? ? ? 33 C9", "GameAssembly.dll");
+	static inline __int64 SetAnimal = Utils::sigscan("48 83 EC 28 48 8B 49 50 48 85 C9 74 0C 45 33 C0 48 83 C4 28 E9 ? ? ? ? E8 ? ? ? ? CC CC 48 89 5C 24 ? 48 89 74 24", "GameAssembly.dll");
 	static inline __int64 get_skybox = Addr::Il2cppResloveCall("UnityEngine.RenderSettings::get_skybox()");
 
 	static inline __int64 weapon_raycast_call_unity_raycast = Utils::sigscan("48 8D ? ? E8 ? ? ? ? 84 C0 0F 84 ? ? ? ? 45 33 ? 48 8D ? ? 48 8D ? ? E8", "GameAssembly.dll")+4;
