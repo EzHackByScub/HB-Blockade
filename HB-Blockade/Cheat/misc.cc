@@ -294,7 +294,7 @@ void __fastcall misc::hk_fire(__int64* vp_FPWeaponShooter, __int64 a2, __int64* 
 					};
 					if (misc::Aimbot)
 					{
-						entitybody = { entitypos->x, 1.65f * misc::bigscale + entitypos->y ,entitypos->z };
+						//entitybody = { entitypos->x, 1.65f * misc::bigscale + entitypos->y ,entitypos->z };
 						auto weaponsystem = Engine::GetWeaponSystem();
 						if (!weaponsystem) return misc::o_FireSpecEffects(vp_FPWeaponShooter);
 						Vec2 angle = Engine::CalcAngle(localposs, entitybody);
